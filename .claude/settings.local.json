@@ -4,7 +4,9 @@
       "Bash(npm start)",
       "Bash(curl:*)",
       "Bash(mkdir:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run deploy:*)"
     ],
     "deny": []
   }
