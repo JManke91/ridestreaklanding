@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/ridestreaklanding/static/css/main.ede6fe8d.css",
-    "main.js": "/ridestreaklanding/static/js/main.fa0429d7.js",
-    "static/js/453.3e0b71db.chunk.js": "/ridestreaklanding/static/js/453.3e0b71db.chunk.js",
-    "static/media/statistics.jpeg": "/ridestreaklanding/static/media/statistics.74ddbd028b8e89f9cad4.jpeg",
-    "static/media/workout-details.jpeg": "/ridestreaklanding/static/media/workout-details.c02bc3bcafd78488b55b.jpeg",
-    "static/media/challenge-creation.jpeg": "/ridestreaklanding/static/media/challenge-creation.10b71893478f5e403b2a.jpeg",
-    "static/media/challenges.jpeg": "/ridestreaklanding/static/media/challenges.66818d0456f99945632c.jpeg",
-    "index.html": "/ridestreaklanding/index.html",
-    "main.ede6fe8d.css.map": "/ridestreaklanding/static/css/main.ede6fe8d.css.map",
-    "main.fa0429d7.js.map": "/ridestreaklanding/static/js/main.fa0429d7.js.map",
-    "453.3e0b71db.chunk.js.map": "/ridestreaklanding/static/js/453.3e0b71db.chunk.js.map"
+    "main.css": "./static/css/main.ede6fe8d.css",
+    "main.js": "./static/js/main.25d65b0f.js",
+    "static/js/453.3e0b71db.chunk.js": "./static/js/453.3e0b71db.chunk.js",
+    "static/media/statistics.jpeg": "./static/media/statistics.74ddbd028b8e89f9cad4.jpeg",
+    "static/media/workout-details.jpeg": "./static/media/workout-details.c02bc3bcafd78488b55b.jpeg",
+    "static/media/challenge-creation.jpeg": "./static/media/challenge-creation.10b71893478f5e403b2a.jpeg",
+    "static/media/challenges.jpeg": "./static/media/challenges.66818d0456f99945632c.jpeg",
+    "index.html": "./index.html",
+    "main.ede6fe8d.css.map": "./static/css/main.ede6fe8d.css.map",
+    "main.25d65b0f.js.map": "./static/js/main.25d65b0f.js.map",
+    "453.3e0b71db.chunk.js.map": "./static/js/453.3e0b71db.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ede6fe8d.css",
-    "static/js/main.fa0429d7.js"
+    "static/js/main.25d65b0f.js"
   ]
 }
