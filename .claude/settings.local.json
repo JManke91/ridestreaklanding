@@ -6,7 +6,9 @@
       "Bash(mkdir:*)",
       "Bash(cp:*)",
       "Bash(npm run build:*)",
-      "Bash(npm run deploy:*)"
+      "Bash(npm run deploy:*)",
+      "Bash(pkill:*)",
+      "Bash(true)"
     ],
     "deny": []
   }
