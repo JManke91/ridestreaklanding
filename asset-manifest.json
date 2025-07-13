@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "./static/css/main.ede6fe8d.css",
-    "main.js": "./static/js/main.25d65b0f.js",
+    "main.css": "./static/css/main.93c61ccc.css",
+    "main.js": "./static/js/main.375edabe.js",
     "static/js/453.3e0b71db.chunk.js": "./static/js/453.3e0b71db.chunk.js",
     "static/media/statistics.jpeg": "./static/media/statistics.74ddbd028b8e89f9cad4.jpeg",
     "static/media/workout-details.jpeg": "./static/media/workout-details.c02bc3bcafd78488b55b.jpeg",
     "static/media/challenge-creation.jpeg": "./static/media/challenge-creation.10b71893478f5e403b2a.jpeg",
     "static/media/challenges.jpeg": "./static/media/challenges.66818d0456f99945632c.jpeg",
     "index.html": "./index.html",
-    "main.ede6fe8d.css.map": "./static/css/main.ede6fe8d.css.map",
-    "main.25d65b0f.js.map": "./static/js/main.25d65b0f.js.map",
+    "main.93c61ccc.css.map": "./static/css/main.93c61ccc.css.map",
+    "main.375edabe.js.map": "./static/js/main.375edabe.js.map",
     "453.3e0b71db.chunk.js.map": "./static/js/453.3e0b71db.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ede6fe8d.css",
-    "static/js/main.25d65b0f.js"
+    "static/css/main.93c61ccc.css",
+    "static/js/main.375edabe.js"
   ]
 }
