@@ -5,7 +5,7 @@ import { Input } from "./components/ui/input"
 import { Label } from "./components/ui/label"
 import { Textarea } from "./components/ui/textarea"
 import { Badge } from "./components/ui/badge"
-import { Bike, Heart, Target, Smartphone, TrendingUp, Clock, Award, Zap, Check, Star, Mail } from "lucide-react"
+import { Bike, Heart, Target, Smartphone, TrendingUp, Clock, Award, Zap, Check, Star, Mail, X, Code } from "lucide-react"
 
 // Import images
 import statisticsImg from "./images/statistics.jpeg"
@@ -15,9 +15,40 @@ import challengeCreationImg from "./images/challenge-creation.jpeg"
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
+
+  const handleDownloadClick = () => {
+    setShowNotification(true)
+    setTimeout(() => setShowNotification(false), 4000)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Development Notification */}
+      {showNotification && (
+        <div className="fixed top-20 right-4 z-[60] bg-slate-800 border border-[#00D4AA] rounded-lg p-4 shadow-2xl backdrop-blur-sm max-w-sm animate-in slide-in-from-right-full duration-500">
+          <div className="flex items-start space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-[#00D4AA] to-[#00D4AA] rounded-lg flex items-center justify-center">
+              <Code className="w-4 h-4 text-white" />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-white font-semibold text-sm">App in Entwicklung</h4>
+              <p className="text-slate-300 text-xs mt-1 leading-relaxed">
+                Die Ride Streak App befindet sich aktuell in der Entwicklung. Der Download wird bald verfügbar sein!
+              </p>
+            </div>
+            <button
+              onClick={() => setShowNotification(false)}
+              className="text-slate-400 hover:text-white transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="mt-3 bg-[#00D4AA]/20 rounded-full h-1 overflow-hidden">
+            <div className="h-full bg-[#00D4AA] rounded-full animate-pulse"></div>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <header className="border-b border-slate-700/50 backdrop-blur-sm bg-slate-900/80 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -43,7 +74,10 @@ function App() {
             </nav>
 
             <div className="flex items-center space-x-4">
-              <Button className="hidden sm:flex bg-gradient-to-r from-[#00D4AA] to-[#00D4AA] hover:from-[#00D4AA] hover:to-[#00D4AA] text-white border-0">
+              <Button 
+                onClick={handleDownloadClick}
+                className="hidden sm:flex bg-gradient-to-r from-[#00D4AA] to-[#00D4AA] hover:from-[#00D4AA] hover:to-[#00D4AA] text-white border-0"
+              >
                 App herunterladen
               </Button>
 
@@ -93,7 +127,10 @@ function App() {
                 >
                   Kontakt
                 </a>
-                <Button className="sm:hidden bg-gradient-to-r from-[#00D4AA] to-[#00D4AA] hover:from-[#00D4AA] hover:to-[#00D4AA] text-white border-0 mt-4">
+                <Button 
+                  onClick={handleDownloadClick}
+                  className="sm:hidden bg-gradient-to-r from-[#00D4AA] to-[#00D4AA] hover:from-[#00D4AA] hover:to-[#00D4AA] text-white border-0 mt-4"
+                >
                   App herunterladen
                 </Button>
               </nav>
@@ -123,6 +160,7 @@ function App() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
               <Button
+                onClick={handleDownloadClick}
                 size="lg"
                 className="bg-gradient-to-r from-[#00D4AA] to-[#00D4AA] hover:from-[#00D4AA] hover:to-[#00D4AA] text-white border-0 px-6 sm:px-8 py-3 w-full sm:w-auto"
               >
