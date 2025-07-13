@@ -68,18 +68,15 @@ function App() {
               <a href="#pricing" className="text-slate-300 hover:text-[#00D4AA] transition-colors">
                 Preise
               </a>
+              <a href="#download" className="text-slate-300 hover:text-[#00D4AA] transition-colors">
+                Download
+              </a>
               <a href="#contact" className="text-slate-300 hover:text-[#00D4AA] transition-colors">
                 Kontakt
               </a>
             </nav>
 
             <div className="flex items-center space-x-4">
-              <Button 
-                onClick={handleDownloadClick}
-                className="hidden sm:flex bg-gradient-to-r from-[#00D4AA] to-[#00D4AA] hover:from-[#00D4AA] hover:to-[#00D4AA] text-white border-0"
-              >
-                App herunterladen
-              </Button>
 
               {/* Mobile Menu Button */}
               <button
@@ -121,18 +118,19 @@ function App() {
                   Preise
                 </a>
                 <a
+                  href="#download"
+                  className="text-slate-300 hover:text-[#00D4AA] transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Download
+                </a>
+                <a
                   href="#contact"
                   className="text-slate-300 hover:text-[#00D4AA] transition-colors py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Kontakt
                 </a>
-                <Button 
-                  onClick={handleDownloadClick}
-                  className="sm:hidden bg-gradient-to-r from-[#00D4AA] to-[#00D4AA] hover:from-[#00D4AA] hover:to-[#00D4AA] text-white border-0 mt-4"
-                >
-                  App herunterladen
-                </Button>
               </nav>
             </div>
           )}
@@ -140,7 +138,7 @@ function App() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-12 sm:py-20 px-4">
+      <section id="download" className="py-12 sm:py-20 px-4">
         <div className="container mx-auto text-center">
           <div className="max-w-4xl mx-auto">
             <Badge className="mb-4 sm:mb-6 bg-[#00D4AA]/20 text-[#00D4AA] border-[#00D4AA]/30 text-sm">
@@ -159,14 +157,19 @@ function App() {
               Herausforderungen und umfassenden Trainingsanalysen. Dein ultimativer Radsport-Begleiter.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
-              <Button
-                onClick={handleDownloadClick}
-                size="lg"
-                className="bg-gradient-to-r from-[#00D4AA] to-[#00D4AA] hover:from-[#00D4AA] hover:to-[#00D4AA] text-white border-0 px-6 sm:px-8 py-3 w-full sm:w-auto"
-              >
-                <Smartphone className="w-5 h-5 mr-2" />
-                Für iOS herunterladen
-              </Button>
+              <div className="relative">
+                <Button
+                  onClick={handleDownloadClick}
+                  size="lg"
+                  className="bg-gradient-to-r from-[#00D4AA] to-[#00D4AA] hover:from-[#00D4AA] hover:to-[#00D4AA] text-white border-0 px-6 sm:px-8 py-3 w-full sm:w-auto"
+                >
+                  <Smartphone className="w-5 h-5 mr-2" />
+                  Für iOS herunterladen
+                </Button>
+                <Badge className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs px-2 py-1 animate-pulse">
+                  Bald verfügbar
+                </Badge>
+              </div>
             </div>
           </div>
         </div>
