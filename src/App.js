@@ -100,40 +100,54 @@ function App() {
           </div>
 
           {/* Mobile Navigation */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-slate-700/50 pt-4">
+          <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          }`}>
+            <div className="mt-4 pb-4 border-t border-slate-700/50 pt-4">
               <nav className="flex flex-col space-y-4">
                 <a
                   href="#features"
-                  className="text-slate-300 hover:text-[#00D4AA] transition-colors py-2"
+                  className={`text-slate-300 hover:text-[#00D4AA] transition-all duration-300 py-2 transform ${
+                    isMobileMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'
+                  }`}
+                  style={{ transitionDelay: isMobileMenuOpen ? '100ms' : '0ms' }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Funktionen
                 </a>
                 <a
                   href="#pricing"
-                  className="text-slate-300 hover:text-[#00D4AA] transition-colors py-2"
+                  className={`text-slate-300 hover:text-[#00D4AA] transition-all duration-300 py-2 transform ${
+                    isMobileMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'
+                  }`}
+                  style={{ transitionDelay: isMobileMenuOpen ? '200ms' : '0ms' }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Preise
                 </a>
                 <a
                   href="#download"
-                  className="text-slate-300 hover:text-[#00D4AA] transition-colors py-2"
+                  className={`text-slate-300 hover:text-[#00D4AA] transition-all duration-300 py-2 transform ${
+                    isMobileMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'
+                  }`}
+                  style={{ transitionDelay: isMobileMenuOpen ? '300ms' : '0ms' }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Download
                 </a>
                 <a
                   href="#contact"
-                  className="text-slate-300 hover:text-[#00D4AA] transition-colors py-2"
+                  className={`text-slate-300 hover:text-[#00D4AA] transition-all duration-300 py-2 transform ${
+                    isMobileMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'
+                  }`}
+                  style={{ transitionDelay: isMobileMenuOpen ? '400ms' : '0ms' }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Kontakt
                 </a>
               </nav>
             </div>
-          )}
+          </div>
         </div>
       </header>
 
