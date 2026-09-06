@@ -1,0 +1,194 @@
+---
+import type { Feature } from '../i18n/types';
+import { SCREENS } from '../assets/screens';
+import PhoneFrame from './PhoneFrame.astro';
+
+interface Props {
+  feature: Feature;
+  /** Odd rows put the image right, even rows put it left. */
+  index: number;
+  /**
+   * 'default' — alternating two-column row
+   * 'bleed'   — full-bleed surface band; used to break the alternating rhythm
+   * 'wide'    — centred, wider media; used for the flyover
+   */
+  variant?: 'default' | 'bleed' | 'wide';
+}
+
+const { feature, index, variant = 'default' } = Astro.props;
+const imageFirst = index % 2 === 1;
+const hasShot = Boolean(feature.shot);
+---
+
+<section
+  id={feature.id}
+  class:list={['feature', `feature-${variant}`, { 'no-shot': !hasShot }]}
+>
+  <div class="container">
+    <div class:list={['feature-grid', { 'image-first': imageFirst }]}>
+      <div class="feature-copy reveal">
+        <span class="eyebrow">{feature.eyebrow}</span>
+        <h2>
+          {feature.h2}
+          {feature.pro && <span class="pill pill-pro">Pro</span>}
+        </h2>
+        <p class="lead">{feature.lead}</p>
+        <ul class="feature-bullets">
+          {
+            feature.bullets.map((bullet) => (
+              <li>
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M3 8.5l3.5 3.5L13 4.5" />
+                </svg>
+                <span>{bullet}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <slot name="copy-extra" />
+      </div>
+
+      {
+        hasShot && (
+          <div class="feature-media reveal" style="--reveal-delay:80ms">
+            <PhoneFrame
+              src={SCREENS[feature.shot!.key]}
+              alt={feature.shot!.alt}
+              width={variant === 'wide' ? 340 : 360}
+            />
+          </div>
+        )
+      }
+    </div>
+
+    {
+      feature.extraShots && feature.extraShots.length > 0 && (
+        <ul class="feature-extras">
+          {feature.extraShots.map((shot, i) => (
+            <li class="reveal" style={`--reveal-delay:${i * 60}ms`}>
+              <PhoneFrame src={SCREENS[shot.key]} alt={shot.alt} width={230} />
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <slot name="after" />
+  </div>
+</section>
+
+<style>
+  .feature {
+    padding-block: var(--rs-section-y);
+  }
+
+  .feature-bleed {
+    background: var(--rs-surface-1);
+    border-block: 1px solid var(--rs-border);
+  }
+
+  .feature-grid {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4.5rem);
+    align-items: center;
+  }
+
+  .feature-copy h2 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .feature-copy .lead {
+    margin-top: 1.25rem;
+  }
+
+  .feature-bullets {
+    display: grid;
+    gap: 0.75rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .feature-bullets li {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: 0.75rem;
+    align-items: start;
+    max-width: 58ch;
+  }
+
+  .feature-bullets svg {
+    width: 16px;
+    height: 16px;
+    margin-top: 0.4rem;
+    color: var(--rs-teal);
+  }
+
+  .feature-media {
+    display: flex;
+    justify-content: center;
+  }
+
+  .feature-extras {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(1rem, 3vw, 2rem);
+    margin: clamp(3rem, 6vw, 4.5rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* A section with no screenshot reads as one wide column, not a lopsided grid. */
+  .no-shot .feature-copy {
+    max-width: 72ch;
+  }
+
+  .no-shot .feature-bullets {
+    max-width: none;
+  }
+
+  @media (min-width: 1024px) {
+    .feature-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .feature-wide .feature-grid {
+      grid-template-columns: 1fr 0.85fr;
+    }
+
+    .image-first .feature-copy {
+      order: 2;
+    }
+
+    .image-first .feature-media {
+      order: 1;
+    }
+
+    .no-shot .feature-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .no-shot .feature-bullets {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem 2.5rem;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .feature-bullets {
+      font-size: 1rem;
+    }
+  }
+</style>

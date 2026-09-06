@@ -1,0 +1,197 @@
+---
+import { formatPrice, PRICING, type Locale } from '../config';
+import { getCopy } from '../i18n';
+import AppStoreBadge from './AppStoreBadge.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+
+// Computed, never hand-written — the old site shipped "Spare €2,89" against
+// numbers that yield €1,89 (brief §1A, §5.7).
+const savingsLine = t.pricing.savingsLine
+  .replace('{amount}', formatPrice(PRICING.savings, locale))
+  .replace('{percent}', String(PRICING.savingsPercent));
+---
+
+<section id={t.pricing.id} class="section pricing band">
+  <div class="container">
+    <div class="pricing-head">
+      <span class="eyebrow">{t.pricing.eyebrow}</span>
+      <h2>{t.pricing.h2}</h2>
+      <p class="lead">{t.pricing.lead}</p>
+    </div>
+
+    <ul class="tiers">
+      {
+        t.pricing.tiers.map((tier, i) => (
+          <li
+            class:list={['card', 'tier', { featured: tier.featured }, 'reveal']}
+            style={`--reveal-delay:${i * 60}ms`}
+          >
+            {tier.badge && <span class="tier-badge">{tier.badge}</span>}
+            <h3>{tier.name}</h3>
+            <p class="tier-tagline muted">{tier.tagline}</p>
+            <p class="tier-price">
+              <span class="stat-number">
+                {tier.price === null ? formatPrice(0, locale) : formatPrice(tier.price, locale)}
+              </span>
+              <span class="tier-period muted">{tier.period}</span>
+            </p>
+            {tier.id === 'yearly' && <p class="tier-savings">{savingsLine}</p>}
+            <ul class="tier-features">
+              {tier.features.map((feature) => (
+                <li>
+                  <span class="tick" aria-hidden="true">
+                    ✓
+                  </span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="pricing-cta">
+      <AppStoreBadge
+        locale={locale}
+        position="web_pricing"
+        label={t.a11y.appStoreBadge}
+        height={50}
+      />
+    </div>
+
+    <p class="pricing-terms muted">{t.pricing.terms}</p>
+    <p class="pricing-terms muted">{t.footer.priceNote}</p>
+  </div>
+</section>
+
+<style>
+  .pricing-head {
+    max-width: 68ch;
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .pricing-head .lead {
+    margin-top: 1rem;
+    max-width: 68ch;
+  }
+
+  .tiers {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    align-items: start;
+  }
+
+  .tier {
+    position: relative;
+    background: var(--rs-bg);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tier-tagline {
+    font-size: 0.875rem;
+  }
+
+  .tier-price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .tier-period {
+    font-size: 0.8125rem;
+  }
+
+  .tier-savings {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--rs-teal);
+  }
+
+  .tier-features {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+  }
+
+  .tier-features li {
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    gap: 0.5rem;
+    align-items: start;
+  }
+
+  .tick {
+    color: var(--rs-teal);
+    font-weight: 700;
+  }
+
+  /* The annual tier is the recommendation: scaled, teal-bordered, badged. */
+  .featured {
+    border-color: var(--rs-teal);
+    box-shadow: 0 0 48px -14px color-mix(in srgb, var(--rs-teal) 40%, transparent);
+  }
+
+  .tier-badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% -50%;
+    background: var(--rs-teal);
+    color: var(--rs-on-teal);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--rs-radius-pill);
+    white-space: nowrap;
+  }
+
+  .pricing-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .pricing-terms {
+    max-width: 76ch;
+    margin: 1.25rem auto 0;
+    font-size: 0.8125rem;
+    text-align: center;
+  }
+
+  @media (min-width: 640px) {
+    .tiers {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .tiers {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .featured {
+      scale: 1.05;
+      z-index: 1;
+    }
+  }
+</style>

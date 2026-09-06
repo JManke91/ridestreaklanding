@@ -1,0 +1,160 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import { storeUrl } from '../../../config';
+import { alternates, getCopy, otherLocale, route } from '../../../i18n';
+import { articleSchema } from '../../../lib/schema';
+import { formatDate, localeOf, pathsForPair, postPath, slugOf } from '../../../lib/blog';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { lang: localeOf(post), slug: slugOf(post) },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const locale = localeOf(post);
+const t = getCopy(locale);
+const { Content } = await render(post);
+
+const canonical = postPath(post);
+const pairPaths = await pathsForPair(post.data.pair);
+const altPath = pairPaths[otherLocale(locale)];
+
+const schema = articleSchema({
+  locale,
+  canonical,
+  title: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: post.data.updatedDate?.toISOString(),
+  breadcrumbs: [
+    { name: 'Ride Streak', path: route('home', locale) },
+    { name: t.blog.indexTitle, path: route('blog', locale) },
+    { name: post.data.title, path: canonical },
+  ],
+});
+---
+
+<BaseLayout
+  locale={locale}
+  title={post.data.metaTitle ?? `${post.data.title} – Ride Streak`}
+  description={post.data.description}
+  canonical={canonical}
+  alternates={alternates(pairPaths)}
+  ogLocale={t.ogLocale}
+  ogLocaleAlternate={t.ogLocaleAlternate}
+  ogTitle={post.data.title}
+  ogDescription={post.data.description}
+  ogType="article"
+  jsonLd={schema}
+>
+  <a class="skip-link" href="#main">{t.a11y.skipToContent}</a>
+  <Header locale={locale} onLanding={false} altPath={altPath} />
+
+  <main id="main" class="post-page">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={route('blog', locale)}>← {t.blog.backToBlog}</a>
+      </nav>
+
+      <article>
+        <header class="post-head">
+          <h1>{post.data.title}</h1>
+          <p class="post-meta muted">
+            {`${t.blog.publishedOn} `}
+            <time datetime={post.data.pubDate.toISOString()}>
+              {formatDate(post.data.pubDate, locale)}
+            </time>
+            {
+              post.data.updatedDate && (
+                <>
+                  {' · '}
+                  {t.blog.updatedOn}{' '}
+                  <time datetime={post.data.updatedDate.toISOString()}>
+                    {formatDate(post.data.updatedDate, locale)}
+                  </time>
+                </>
+              )
+            }
+          </p>
+        </header>
+
+        <div class="prose">
+          <Content />
+        </div>
+      </article>
+
+      <aside class="post-cta">
+        <h2>{t.blog.ctaHeading}</h2>
+        <p>{t.blog.ctaBody}</p>
+        <a
+          class="btn btn-primary"
+          href={storeUrl('web_footer')}
+          target="_blank"
+          rel="noopener">{t.hero.cta}</a
+        >
+      </aside>
+    </div>
+  </main>
+
+  <Footer locale={locale} onLanding={false} altPath={altPath} />
+</BaseLayout>
+
+<style>
+  .post-page {
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .post-page :global(.container) {
+    max-width: 760px;
+  }
+
+  .crumbs {
+    font-size: var(--rs-caption);
+    margin-bottom: 2rem;
+  }
+
+  .crumbs a:hover {
+    color: var(--rs-teal);
+  }
+
+  .post-head {
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--rs-border);
+  }
+
+  .post-head h1 {
+    font-size: clamp(1.875rem, 4.2vw, 2.75rem);
+  }
+
+  .post-meta {
+    margin-top: 1rem;
+    font-size: var(--rs-caption);
+  }
+
+  .post-cta {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding: clamp(1.75rem, 4vw, 2.5rem);
+    background: var(--rs-surface-1);
+    border: 1px solid var(--rs-border-lit);
+    border-radius: var(--rs-radius-card);
+  }
+
+  .post-cta h2 {
+    font-size: 1.375rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .post-cta p {
+    color: var(--rs-text-body);
+    margin-bottom: 1.5rem;
+    font-size: 0.9375rem;
+  }
+</style>

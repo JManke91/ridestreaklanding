@@ -1,0 +1,66 @@
+---
+import { type Locale } from '../config';
+import { getCopy } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+---
+
+{/*
+  Social proof, pragmatic version (§5.4). There are only 4 App Store ratings,
+  so no rating widget and no review quotes — a "works with" row instead.
+  Garmin and Wahoo appear as plain text, never as logos, until their brand
+  guidelines have been checked (§10).
+*/}
+<section class="works" aria-labelledby="works-title">
+  <div class="container">
+    <h2 id="works-title" class="works-title">{t.worksWith.title}</h2>
+    <ul class="works-row">
+      {t.worksWith.items.map((item) => <li>{item}</li>)}
+    </ul>
+    <p class="works-note muted">{t.worksWith.note}</p>
+  </div>
+</section>
+
+<style>
+  .works {
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+    text-align: center;
+  }
+
+  .works-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--rs-text-muted);
+  }
+
+  .works-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 2.5rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .works-row li {
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--rs-text);
+    opacity: 0.75;
+  }
+
+  .works-note {
+    margin: 1.5rem auto 0;
+    font-size: var(--rs-caption);
+    max-width: 58ch;
+  }
+</style>

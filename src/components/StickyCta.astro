@@ -1,0 +1,102 @@
+---
+import { type Locale } from '../config';
+import { getCopy } from '../i18n';
+import AppStoreBadge from './AppStoreBadge.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+---
+
+{/*
+  Mobile-only sticky CTA (§5.11) — the single highest-leverage conversion
+  addition on the page. Appears once the hero has left the viewport and hides
+  while the visitor scrolls up, so it never fights the content they came for.
+*/}
+<div class="sticky-cta" id="sticky-cta" hidden>
+  <div class="sticky-inner">
+    <span class="sticky-label">{t.stickyCta.label}</span>
+    <AppStoreBadge
+      locale={locale}
+      position="web_sticky"
+      label={t.a11y.appStoreBadge}
+      height={44}
+    />
+  </div>
+</div>
+
+<style>
+  .sticky-cta {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 90;
+    background: color-mix(in srgb, var(--rs-surface-2) 92%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--rs-border);
+    padding: 0.75rem var(--rs-gutter) calc(0.75rem + env(safe-area-inset-bottom));
+    translate: 0 100%;
+    transition: translate 260ms var(--rs-ease);
+  }
+
+  .sticky-cta.visible {
+    translate: 0 0;
+  }
+
+  .sticky-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 520px;
+    margin-inline: auto;
+  }
+
+  .sticky-label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--rs-text);
+  }
+
+  @media (min-width: 900px) {
+    .sticky-cta {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const bar = document.getElementById('sticky-cta');
+  const hero = document.getElementById('hero');
+
+  if (bar && hero && 'IntersectionObserver' in window) {
+    bar.hidden = false;
+
+    let pastHero = false;
+    let lastY = window.scrollY;
+
+    const render = (show: boolean) => bar.classList.toggle('visible', show);
+
+    new IntersectionObserver(
+      ([entry]) => {
+        pastHero = !entry.isIntersecting;
+        render(pastHero);
+      },
+      { rootMargin: '-80px 0px 0px 0px' }
+    ).observe(hero);
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        const y = window.scrollY;
+        const scrollingUp = y < lastY;
+        lastY = y;
+        if (pastHero) render(!scrollingUp);
+      },
+      { passive: true }
+    );
+  }
+</script>

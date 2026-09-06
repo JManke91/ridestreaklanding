@@ -1,0 +1,52 @@
+---
+import { storeUrl, type CtaPosition, type Locale } from '../config';
+
+interface Props {
+  locale: Locale;
+  position: CtaPosition;
+  label: string;
+  /** Rendered height in px. Apple's guidelines set a 40px minimum. */
+  height?: number;
+  class?: string;
+}
+
+const { locale, position, label, height = 52, class: className } = Astro.props;
+
+// Apple's official badge artwork, unmodified, at its native 119.66:40 ratio.
+const RATIO = 119.66407 / 40;
+const width = Math.round(height * RATIO);
+---
+
+<a
+  class:list={['appstore-badge', className]}
+  href={storeUrl(position)}
+  target="_blank"
+  rel="noopener"
+  aria-label={label}
+>
+  <img
+    src={`/badges/appstore-${locale}.svg`}
+    width={width}
+    height={height}
+    alt={label}
+    loading="eager"
+    decoding="async"
+  />
+</a>
+
+<style>
+  .appstore-badge {
+    display: inline-block;
+    border-radius: 8px;
+    transition: translate 160ms var(--rs-ease);
+  }
+
+  .appstore-badge:hover {
+    translate: 0 -2px;
+  }
+
+  /* Apple requires clear space around the badge of at least 10% of its height. */
+  .appstore-badge img {
+    height: auto;
+  }
+</style>

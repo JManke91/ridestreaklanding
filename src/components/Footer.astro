@@ -1,0 +1,182 @@
+---
+import { APP, type Locale } from '../config';
+import { getCopy, otherLocale, route } from '../i18n';
+import Wordmark from './Wordmark.astro';
+
+interface Props {
+  locale: Locale;
+  onLanding?: boolean;
+  /** Equivalent page in the other locale; see Header.astro. */
+  altPath?: string;
+}
+
+const { locale, onLanding = true, altPath } = Astro.props;
+const t = getCopy(locale);
+const other = otherLocale(locale);
+const home = route('home', locale);
+const switchTo = altPath ?? route('home', other);
+const prefix = onLanding ? '' : home;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <Wordmark />
+        <p class="footer-tagline muted">{t.footer.tagline}</p>
+      </div>
+
+      <nav aria-labelledby="foot-product">
+        <h2 id="foot-product">{t.footer.productHeading}</h2>
+        <ul>
+          <li><a href={`${prefix}#${t.features[0].id}`}>{t.footer.links.features}</a></li>
+          <li><a href={`${prefix}#${t.pricing.id}`}>{t.footer.links.pricing}</a></li>
+          <li><a href={`${prefix}#${t.faq.id}`}>{t.footer.links.faq}</a></li>
+          <li><a href={route('blog', locale)}>{t.footer.links.blog}</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-labelledby="foot-legal">
+        <h2 id="foot-legal">{t.footer.legalHeading}</h2>
+        <ul>
+          <li>
+            <a href={route('impressum', locale)} hreflang="de" lang="de">
+              {t.footer.links.impressum}
+            </a>
+          </li>
+          <li><a href={route('privacy', locale)}>{t.footer.links.privacy}</a></li>
+          <li><a href={route('terms', locale)}>{t.footer.links.terms}</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <h2>{t.footer.supportHeading}</h2>
+        <p class="footer-support muted">{t.footer.supportIntro}</p>
+        <p>
+          <a class="footer-mail" href={`mailto:${APP.supportEmail}`}>
+            {APP.supportEmail}
+          </a>
+        </p>
+        <h2 class="footer-lang-head">{t.footer.languageHeading}</h2>
+        <nav class="footer-lang" aria-label={t.a11y.languageNav}>
+          <span aria-current="true">{locale.toUpperCase()}</span>
+          <a href={switchTo} hreflang={other} lang={other}>
+            {other.toUpperCase()}
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <img
+        class="strava-mark"
+        src="/badges/strava-powered-white.svg"
+        width="182"
+        height="18"
+        alt="Powered by Strava"
+        loading="lazy"
+        decoding="async"
+      />
+      <p class="legalese">{t.footer.appleTrademark}</p>
+      <p class="legalese">{t.footer.stravaTrademark}</p>
+      <p class="legalese">
+        © {year} {APP.developer}. {t.footer.copyright}
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--rs-border);
+    padding-block: clamp(3rem, 6vw, 4.5rem) 2.5rem;
+    font-size: var(--rs-caption);
+    color: var(--rs-text-muted);
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .site-footer h2 {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rs-text);
+    margin-bottom: 1rem;
+  }
+
+  .site-footer ul {
+    display: grid;
+    gap: 0.625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer a:hover {
+    color: var(--rs-teal);
+  }
+
+  .footer-tagline {
+    margin-top: 1rem;
+    max-width: 34ch;
+  }
+
+  .footer-support {
+    margin-bottom: 0.5rem;
+    max-width: 30ch;
+  }
+
+  .footer-mail {
+    color: var(--rs-teal);
+    word-break: break-word;
+  }
+
+  .footer-lang-head {
+    margin-top: 1.75rem;
+  }
+
+  .footer-lang {
+    display: flex;
+    gap: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .footer-lang [aria-current] {
+    color: var(--rs-text);
+  }
+
+  .footer-bottom {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--rs-border);
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  /* Official mark, unmodified, clear of the RideStreak wordmark. */
+  .strava-mark {
+    height: auto;
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+  }
+
+  .legalese {
+    font-size: 0.75rem;
+    line-height: 1.55;
+    max-width: 90ch;
+    opacity: 0.8;
+  }
+
+  @media (min-width: 720px) {
+    .footer-grid {
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 3rem;
+    }
+  }
+</style>

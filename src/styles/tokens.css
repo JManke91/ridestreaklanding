@@ -1,0 +1,61 @@
+/* ---------------------------------------------------------------------------
+   RideStreak design tokens — brief §9.2
+   Single source of truth for colour, type and rhythm. Nothing on the site may
+   use a raw hex value; if a colour is needed it gets a token here first.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* Brand */
+  --rs-teal: #00d4aa;
+  --rs-teal-bright: #2dd4b5; /* stats-screen variant, for gradients */
+  --rs-teal-dim: #0a8f76; /* borders, dividers, muted accents */
+  --rs-gold: #e8b84b; /* Pro badges, records — use sparingly */
+  --rs-strava: #fc5200; /* Strava brand elements ONLY */
+
+  /* Ink for use on top of a teal fill. White on teal is ~1.9:1 and unreadable. */
+  --rs-on-teal: #06231c;
+
+  /* Surfaces */
+  --rs-bg: #0a0a0b; /* page */
+  --rs-surface-1: #121317; /* cards, full-bleed bands */
+  --rs-surface-2: #1a1c22; /* raised cards, hover */
+  --rs-border: #262a33;
+  --rs-border-lit: rgba(0, 212, 170, 0.24); /* accent-lit card borders */
+
+  /* Text — contrast-checked on --rs-bg */
+  --rs-text: #f5f7fa; /* headings  ~17:1 */
+  --rs-text-body: #c3c9d4; /* body      ~10:1 */
+  --rs-text-muted: #8a94a6; /* captions  ~5.2:1 — do not go dimmer */
+
+  /* Wear states, mirroring the app's Garage colour coding */
+  --rs-ok: #34d399;
+  --rs-watch: #e8b84b;
+  --rs-soon: #f59e0b;
+  --rs-overdue: #ef4444;
+
+  --rs-radius-card: 16px;
+  --rs-radius-pill: 999px;
+
+  /* Rhythm */
+  --rs-section-y: clamp(4rem, 9vw, 7rem);
+  --rs-container: 1200px;
+  --rs-gutter: 24px;
+  --rs-prose: 62ch;
+
+  /* Type scale (fluid — no media queries needed from 375px to 1440px) */
+  --rs-h1: clamp(2.5rem, 6vw, 4.5rem);
+  --rs-h2: clamp(1.75rem, 3.5vw, 2.75rem);
+  --rs-h3: 1.25rem;
+  --rs-lead: clamp(1.05rem, 1.6vw, 1.25rem);
+  --rs-body: 1rem;
+  --rs-caption: 0.875rem;
+  --rs-stat: clamp(2rem, 4vw, 3rem);
+
+  --rs-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --rs-gutter: 48px;
+  }
+}

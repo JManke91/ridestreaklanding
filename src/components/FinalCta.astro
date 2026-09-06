@@ -1,0 +1,62 @@
+---
+import { type Locale } from '../config';
+import { getCopy } from '../i18n';
+import AppStoreBadge from './AppStoreBadge.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+---
+
+<section class="final">
+  <div class="container final-inner">
+    <h2>{t.finalCta.h2}</h2>
+    <p class="lead">{t.finalCta.lead}</p>
+    <div class="final-badge">
+      <AppStoreBadge
+        locale={locale}
+        position="web_final"
+        label={t.a11y.appStoreBadge}
+        height={56}
+      />
+    </div>
+    <p class="final-trust">{t.finalCta.trust}</p>
+  </div>
+</section>
+
+<style>
+  .final {
+    /* Generous — this is the last impression (§9.3). */
+    padding-block: clamp(5rem, 10vw, 8rem);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--rs-teal-dim) 26%, var(--rs-bg)),
+      var(--rs-bg)
+    );
+    border-top: 1px solid var(--rs-border);
+    text-align: center;
+  }
+
+  .final-inner {
+    max-width: 720px;
+  }
+
+  .final .lead {
+    margin: 1.25rem auto 0;
+  }
+
+  .final-badge {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.5rem;
+  }
+
+  .final-trust {
+    margin: 1rem auto 0;
+    font-size: var(--rs-caption);
+    color: var(--rs-text-muted);
+  }
+</style>

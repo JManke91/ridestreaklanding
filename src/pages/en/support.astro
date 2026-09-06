@@ -1,0 +1,72 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { APP } from '../../config';
+import { ROUTES } from '../../i18n';
+---
+
+<PageLayout
+  locale="en"
+  title="Support"
+  description="Help with Ride Streak: common issues with Apple Health, Strava and the Garage — and how to reach us."
+  paths={ROUTES.support}
+  intro="Just write to us. The developer answers, not a ticket system."
+>
+  <div class="callout">
+    <p>
+      <strong>Email:</strong>
+      <a href={`mailto:${APP.supportEmail}?subject=Ride%20Streak%20Support`}
+        >{APP.supportEmail}</a
+      >
+    </p>
+    <p>
+      Useful to include: your iOS version, the app version (Settings → at the
+      bottom) and, if it concerns a specific ride, its date.
+    </p>
+  </div>
+
+  <h2>Common cases</h2>
+
+  <h3>No rides are showing up</h3>
+  <p>
+    Ride Streak reads from Apple Health only. Check Settings → Privacy &amp;
+    Security → Health → Ride Streak and make sure every category is enabled.
+    Without permission for "Workouts" the list stays empty. Rides that only
+    exist in a manufacturer's app and are never written to Apple Health cannot
+    reach the app — that is what the optional Strava connection is for.
+  </p>
+
+  <h3>Power, cadence or segments are missing</h3>
+  <p>
+    Apple Health does not carry these values. Connect Strava in Settings so
+    Ride Streak can pull them from your bike computer.
+  </p>
+
+  <h3>The Garage is not counting kilometres</h3>
+  <p>
+    Parts only count from their install date, and only for rides assigned to
+    that bike. Check your assignment rules, or assign rides retroactively with
+    "Assign rides by date".
+  </p>
+
+  <h3>Restore purchases</h3>
+  <p>
+    Open Settings in the app and tap "Restore purchases". You need the same
+    Apple ID the purchase was made with. Refunds run exclusively through
+    <a href="https://reportaproblem.apple.com" rel="noopener" target="_blank"
+      >reportaproblem.apple.com</a
+    >.
+  </p>
+
+  <h3>Cancel a subscription</h3>
+  <p>
+    iPhone Settings → your name → Subscriptions → Ride Streak. Every free
+    feature stays available afterwards.
+  </p>
+
+  <h3>Delete your account and cloud data</h3>
+  <p>
+    If you enabled RideStreak Cloud you can delete your account and all
+    server-side data directly in the app's settings. Without Cloud there is no
+    account — deleting the app is enough.
+  </p>
+</PageLayout>

@@ -1,0 +1,165 @@
+---
+import { STRAVA_PROMINENCE, type Locale } from '../config';
+import { getCopy } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+
+/*
+  Strava prominence is a switch, not a rewrite (brief §4.11).
+
+  While STRAVA_PROMINENCE is 'secondary' the band stays compact and is framed
+  as an optional enhancement — the app is self-serve capped at 10 connected
+  athletes until Strava's Developer Program Review is approved, so driving
+  volume here breaks the feature for new users. Flip the constant in
+  src/config.ts once the review clears.
+
+  Brand rules honoured here (developers.strava.com/guidelines):
+  - The official "Compatible with Strava" mark is used unmodified, from the
+    downloaded brand pack in brand/strava/. It is the interoperability
+    reference for a marketing page.
+  - The "Connect with Strava" button is deliberately NOT shown. Strava
+    requires that button to link to a real OAuth authorization endpoint; on a
+    marketing page it would be a dead control, which is worse than omitting it.
+  - The mark sits apart from the RideStreak wordmark, is never recoloured,
+    resized out of ratio or animated, and is not used as a site icon.
+  - "Strava" never appears in the page <title> or in the site's own naming.
+  - #FC5200 is used only for the tick icons and the top rule, nowhere else.
+*/
+const isPrimary = STRAVA_PROMINENCE === 'primary';
+---
+
+<section id={t.strava.id} class:list={['strava', { primary: isPrimary }]}>
+  <div class="container strava-inner">
+    <span class="eyebrow strava-eyebrow">{t.strava.eyebrow}</span>
+    <h2>{t.strava.h2}</h2>
+    <p class="lead">{t.strava.lead}</p>
+
+    <ul class="strava-list">
+      {
+        t.strava.bullets.map((bullet) => (
+          <li>
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 8.5l3.5 3.5L13 4.5" />
+            </svg>
+            <span>{bullet}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="strava-closing">{t.strava.closing}</p>
+
+    <img
+      class="strava-mark"
+      src="/badges/strava-compatible-white.svg"
+      width="218"
+      height="18"
+      alt="Compatible with Strava"
+      loading="lazy"
+      decoding="async"
+    />
+
+    <p class="strava-attr">{t.strava.attribution}</p>
+  </div>
+</section>
+
+<style>
+  .strava {
+    background: var(--rs-surface-1);
+    border-top: 1px solid color-mix(in srgb, var(--rs-strava) 30%, transparent);
+    border-bottom: 1px solid var(--rs-border);
+    /* Roughly half the vertical height of a full feature section (§9.3). */
+    padding-block: clamp(2.75rem, 5vw, 4rem);
+  }
+
+  .strava.primary {
+    padding-block: clamp(4rem, 8vw, 6rem);
+  }
+
+  .strava-inner {
+    max-width: 900px;
+    text-align: center;
+  }
+
+  .strava-eyebrow {
+    color: var(--rs-strava);
+  }
+
+  .strava .lead,
+  .strava-closing,
+  .strava-attr {
+    margin-inline: auto;
+  }
+
+  .strava .lead {
+    margin-top: 1rem;
+  }
+
+  .strava-list {
+    display: grid;
+    gap: 0.75rem;
+    margin: 2rem auto 0;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+    max-width: 760px;
+  }
+
+  .strava-list li {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: 0.75rem;
+    align-items: start;
+    font-size: 0.9375rem;
+  }
+
+  .strava-list svg {
+    width: 16px;
+    height: 16px;
+    margin-top: 0.35rem;
+    /* The one place on the page this colour is allowed. */
+    color: var(--rs-strava);
+  }
+
+  .strava-closing {
+    margin-top: 2rem;
+    font-size: 0.9375rem;
+    color: var(--rs-text-muted);
+    max-width: 68ch;
+  }
+
+  /* Official mark, unmodified and clear of the RideStreak branding. */
+  .strava-mark {
+    margin: 1.75rem auto 0;
+    height: auto;
+    opacity: 0.9;
+  }
+
+  .strava-attr {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--rs-text-muted);
+    opacity: 0.75;
+    max-width: 72ch;
+  }
+
+  @media (min-width: 768px) {
+    .strava-list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.875rem 2.5rem;
+    }
+  }
+</style>

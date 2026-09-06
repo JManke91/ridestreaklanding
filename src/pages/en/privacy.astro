@@ -1,0 +1,158 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { APP, OPERATOR } from '../../config';
+import { ROUTES } from '../../i18n';
+---
+
+<PageLayout
+  locale="en"
+  title="Privacy Policy"
+  description="How Ride Streak handles your data: no accounts, no ads, no selling. Your rides stay on your iPhone."
+  paths={ROUTES.privacy}
+  lastUpdated="6 September 2026"
+  intro="This policy covers the ridestreak.de website and the Ride Streak iPhone app."
+>
+  <h2>1. Controller</h2>
+  <p>
+    The controller under the General Data Protection Regulation (GDPR) is:<br />
+    {OPERATOR.name}<br />
+    {OPERATOR.street}<br />
+    {OPERATOR.postalCode} {OPERATOR.city}<br />
+    Germany<br />
+    Email: <a href={`mailto:${APP.supportEmail}`}>{APP.supportEmail}</a>
+  </p>
+
+  <h2>2. The website</h2>
+
+  <h3>2.1 Hosting and server logs</h3>
+  <p>
+    This site is served by GitHub Pages (GitHub, Inc., 88 Colin P Kelly Jr
+    Street, San Francisco, CA 94107, USA). When you open a page, GitHub
+    processes technically necessary connection data — in particular your IP
+    address, the date and time of the request, the page requested and your
+    browser and operating system. The legal basis is Art. 6(1)(f) GDPR; the
+    legitimate interest is the secure and stable operation of the site.
+    Transfers to the USA rely on GitHub's standard contractual clauses. See the
+    <a
+      href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+      rel="noopener"
+      target="_blank">GitHub Privacy Statement</a
+    >.
+  </p>
+
+  <h3>2.2 No cookies, no tracking</h3>
+  <p>
+    This site sets <strong>no cookies</strong>, embeds no advertising networks
+    and performs no cross-site tracking. That is also why there is no consent
+    banner.
+  </p>
+
+  <h3>2.3 Fonts and external content</h3>
+  <p>
+    All fonts are served <strong>from this server</strong>. There is no
+    connection to Google Fonts or any other font CDN, so no IP addresses are
+    passed to third parties. Images, scripts and stylesheets are self-hosted
+    too.
+  </p>
+
+  <h3>2.4 Contacting us</h3>
+  <p>
+    If you email us, we process what you send purely to answer your enquiry
+    (Art. 6(1)(b) or (f) GDPR). Messages are deleted once the matter is closed
+    and no statutory retention period applies.
+  </p>
+
+  <h2>3. The app</h2>
+
+  <h3>3.1 Principle</h3>
+  <p>
+    Your cycling data lives on your iPhone and in Apple Health. Nothing is
+    uploaded unless you explicitly turn it on. Using Ride Streak requires
+    <strong>no account</strong>. There are no ads, no profiling and no sale of
+    data.
+  </p>
+
+  <h3>3.2 Apple Health (HealthKit)</h3>
+  <p>
+    With your permission, Ride Streak reads workout and health data from Apple
+    Health — cycling workouts, distance, duration, elevation, heart rate,
+    energy burned and body weight. This data is processed on your device only
+    and is <strong>never</strong> transmitted to us or to third parties. You
+    can withdraw access at any time under Settings → Privacy &amp; Security →
+    Health. Apple Health data is never used for advertising and never shared.
+  </p>
+
+  <h3>3.3 Strava (optional)</h3>
+  <p>
+    If you choose to connect Strava, Ride Streak fetches activities and profile
+    values through the official Strava API — including power, cadence,
+    segments, laps, heart-rate zones, FTP and weight. Authorisation happens via
+    OAuth directly with Strava; we never receive your Strava password. The
+    retrieved data is stored locally on your device. The legal basis is your
+    consent under Art. 6(1)(a) GDPR. Disconnecting removes all imported Strava
+    data from the app. Strava's own
+    <a href="https://www.strava.com/legal/privacy" rel="noopener" target="_blank"
+      >privacy policy</a
+    > applies in addition.
+  </p>
+
+  <h3>3.4 RideStreak Cloud (optional, opt-in)</h3>
+  <p>
+    RideStreak Cloud is off by default. When you switch it on, only
+    <strong>daily training summaries</strong> are transmitted and stored on servers
+    in the European Union:
+  </p>
+  <ul>
+    <li>Date</li>
+    <li>Duration</li>
+    <li>Distance</li>
+    <li>Elevation gain</li>
+    <li>Training load (as a daily figure)</li>
+  </ul>
+  <p>
+    <strong>Not transmitted:</strong> GPS routes, raw heart-rate data, photos,
+    per-ride power data, or anything about your bikes and components. Training
+    load is calculated on your device; only the finished daily number is
+    synced. The legal basis is your consent (Art. 6(1)(a) GDPR). You can
+    withdraw that consent at any time in the app's settings and delete your
+    account together with all server-side data there.
+  </p>
+
+  <h3>3.5 iCloud sync</h3>
+  <p>
+    With Ride Streak Pro, the app syncs your bikes, parts, rules, tours and
+    goals through your private iCloud database. That data sits in your Apple
+    account, not with us, and we cannot access it. Apple's privacy policy
+    applies.
+  </p>
+
+  <h3>3.6 Purchases</h3>
+  <p>
+    Ride Streak Pro is sold through the Apple App Store. Payment data is
+    handled exclusively by Apple; we receive no card or billing details, only
+    an anonymous purchase status used to unlock features.
+  </p>
+
+  <h2>4. Your rights</h2>
+  <p>Under the GDPR you have the right to:</p>
+  <ul>
+    <li>access the data held about you (Art. 15)</li>
+    <li>have inaccurate data corrected (Art. 16)</li>
+    <li>erasure (Art. 17)</li>
+    <li>restriction of processing (Art. 18)</li>
+    <li>data portability (Art. 20)</li>
+    <li>object to processing (Art. 21)</li>
+    <li>withdraw consent with future effect (Art. 7(3))</li>
+  </ul>
+  <p>
+    Write to <a href={`mailto:${APP.supportEmail}`}>{APP.supportEmail}</a>. You
+    also have the right to lodge a complaint with a data protection supervisory
+    authority (Art. 77 GDPR).
+  </p>
+
+  <h2>5. Changes</h2>
+  <p>
+    We update this policy when the app or the site changes. The version
+    published here is the one that applies.
+  </p>
+</PageLayout>

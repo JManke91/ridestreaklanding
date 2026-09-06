@@ -1,0 +1,133 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { APP, formatPrice, PRICING } from '../../config';
+import { ROUTES } from '../../i18n';
+---
+
+<PageLayout
+  locale="en"
+  title="Terms of Use"
+  metaTitle="Terms of Use – Ride Streak"
+  description="Terms of use for the Ride Streak iPhone app and the Ride Streak Pro subscription."
+  paths={ROUTES.terms}
+  lastUpdated="6 September 2026"
+>
+  <h2>1. Scope</h2>
+  <p>
+    These terms cover use of the Ride Streak iPhone app, offered by {
+      APP.developer
+    }. Purchases of Ride Streak Pro are made and processed through the Apple
+    App Store; Apple's terms apply in addition and take precedence for the
+    purchase itself.
+  </p>
+
+  <h2>2. What the app does — and does not</h2>
+  <p>
+    Ride Streak analyses rides that have already been recorded. It reads them
+    from Apple Health and, if you enable it, from Strava.
+  </p>
+  <p>
+    Ride Streak <strong>does not record rides</strong>. There is no recording
+    feature, no navigation and no route planning. To record you need an Apple
+    Watch, a bike computer or another app that writes to Apple Health.
+  </p>
+
+  <h2>3. Requirements</h2>
+  <p>
+    Ride Streak requires an iPhone running iOS {APP.minOs} or later. There is
+    no Apple Watch, iPad, Android or web version. Individual features
+    additionally require Apple Health permission, a Strava connection or
+    RideStreak Cloud.
+  </p>
+
+  <h2>4. Free use and Ride Streak Pro</h2>
+  <p>
+    The app is free to use. Ride Streak Pro is optional and unlocks additional
+    features (training load, power analysis, Fitness &amp; Form, 3D Flyover,
+    image and video export, calories, iCloud sync).
+  </p>
+  <table>
+    <thead>
+      <tr><th>Plan</th><th>Price</th><th>Billing</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Pro monthly</td>
+        <td>{formatPrice(PRICING.monthly, 'en')}</td>
+        <td>monthly, renews automatically</td>
+      </tr>
+      <tr>
+        <td>Pro yearly</td>
+        <td>{formatPrice(PRICING.yearly, 'en')}</td>
+        <td>yearly, renews automatically</td>
+      </tr>
+      <tr>
+        <td>Lifetime</td>
+        <td>{formatPrice(PRICING.lifetime, 'en')}</td>
+        <td>one-time, does not renew</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    All prices include VAT. The price shown in the App Store at the time of
+    purchase is the one that applies; regional differences are possible.
+  </p>
+
+  <h2>5. Renewal and cancellation</h2>
+  <p>
+    Subscriptions renew automatically unless cancelled at least 24 hours before
+    the end of the current period. Manage and cancel them in your iPhone
+    Settings under your name → Subscriptions. When a subscription ends the app
+    remains usable with every free feature. Lifetime is a one-time purchase.
+  </p>
+
+  <h2>6. Withdrawal and refunds</h2>
+  <p>
+    Refunds are handled exclusively by Apple. Request one through
+    <a href="https://reportaproblem.apple.com" rel="noopener" target="_blank"
+      >reportaproblem.apple.com</a
+    >. As a consumer you have the statutory right of withdrawal in relation to
+    Apple.
+  </p>
+
+  <h2>7. Licence</h2>
+  <p>
+    You receive a simple, non-transferable right to use Ride Streak on the
+    devices associated with your account. Reverse engineering, resale and
+    circumventing protection mechanisms are not permitted except where the law
+    mandates otherwise.
+  </p>
+
+  <h2>8. Warranty and liability</h2>
+  <p>
+    The values Ride Streak calculates — in particular training load, FTP
+    estimate, power zones and wear indicators — are
+    <strong>guidance figures</strong>. They replace neither medical advice nor
+    a competent inspection of your bicycle. Decisions about training and about
+    replacing safety-critical components are yours; when in doubt, have your
+    bike checked by a qualified mechanic.
+  </p>
+  <p>
+    We are liable without limitation for intent and gross negligence, for
+    injury to life, body or health, and under the German Product Liability Act.
+    For ordinary negligence we are liable only for breaches of material
+    contractual obligations, limited to the foreseeable damage typical for this
+    type of contract.
+  </p>
+
+  <h2>9. Third-party trademarks</h2>
+  <p>
+    Apple, Apple Health, Apple Watch and App Store are trademarks of Apple Inc.
+    Strava is a trademark of Strava, Inc.; Garmin and Wahoo are trademarks of
+    their respective owners. Ride Streak is not affiliated with, endorsed or
+    sponsored by any of them.
+  </p>
+
+  <h2>10. Changes and governing law</h2>
+  <p>
+    We may adapt these terms when the feature set or the legal situation
+    changes. German law applies, excluding the UN Convention on Contracts for
+    the International Sale of Goods; mandatory consumer protection rules of
+    your country of residence remain unaffected.
+  </p>
+</PageLayout>

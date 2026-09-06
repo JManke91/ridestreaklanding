@@ -1,0 +1,55 @@
+---
+interface Props {
+  size?: number;
+}
+const { size = 30 } = Astro.props;
+
+/*
+  The real app icon from public/app_logo.svg — the same artwork that ships as
+  the favicon and on the App Store. Referenced by URL rather than inlined
+  because the wordmark appears twice per page (header and footer) and the
+  icon is ~3.6 KB of gradients, a grid pattern and chart bars.
+*/
+---
+
+<span class="wordmark" style={`--mark:${size}px`}>
+  <img
+    class="mark"
+    src="/app_logo.svg"
+    width={size}
+    height={size}
+    alt=""
+    aria-hidden="true"
+    decoding="async"
+  />
+  <span class="word">Ride<span class="word-accent">Streak</span></span>
+</span>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .mark {
+    width: var(--mark);
+    height: var(--mark);
+    flex-shrink: 0;
+    /* The icon carries its own near-black ground; round it to match the
+       iOS app-icon shape rather than leaving a hard square on the header. */
+    border-radius: 22%;
+  }
+
+  .word {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--rs-text);
+    white-space: nowrap;
+  }
+
+  .word-accent {
+    color: var(--rs-teal);
+  }
+</style>
