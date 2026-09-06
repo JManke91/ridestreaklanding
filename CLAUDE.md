@@ -4,88 +4,73 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a React-based landing page for "Ride Streak", a cycling tracking app for iOS. The project is built with Create React App and uses modern React patterns with hooks. The site is designed to promote and showcase the iOS app's features and pricing plans.
+Single-page marketing site for "Ride Streak", an iOS cycling app. Create React App (react-scripts 5) + Tailwind, deployed to GitHub Pages and served on the custom domain `https://ridestreak.de` (remote: `git@github.com:JManke91/ridestreaklanding.git`). All user-facing copy is **German**.
 
-## Development Commands
+## Commands
 
 ```bash
-# Start development server (runs on http://localhost:3000)
-npm start
-
-# Run tests in interactive watch mode
-npm test
-
-# Create production build
-npm run build
-
-# Deploy to GitHub Pages (requires gh-pages setup)
-npm run deploy
+npm start                          # dev server on http://localhost:3000
+npm run build                      # production build into build/
+npm run deploy                     # predeploy runs build, then gh-pages -d build
+npm test                           # CRA/Jest watch mode
+npm test -- --watchAll=false       # single non-interactive run (needed in CI/agent contexts)
+npm test -- src/App.test.js        # run one test file
 ```
 
-## Technology Stack
+There is no separate lint script — ESLint runs as part of `react-scripts start`/`build` via the `eslintConfig` block in package.json (`react-app`, `react-app/jest`). Warnings appear in the dev-server output and in build logs.
 
-- **React 19.1.0** with hooks (useState)
-- **Tailwind CSS 3.4.17** for styling with custom theme configuration
-- **Shadcn/ui components** - Custom UI component library with variants using `class-variance-authority`
-- **Lucide React** for icons
-- **Deployed to GitHub Pages** at `https://JManke91.github.io/ridestreaklanding`
+## Deployment
+
+The site is hosted on GitHub Pages, built from the **`gh-pages`** branch, and served at **https://ridestreak.de**.
+
+`main` and `gh-pages` are orthogonal, not two versions of the same tree: `main` is the source, `gh-pages` holds only the compiled output of `npm run build` (`index.html`, `static/`, hashed media). **Never merge, rebase, or diff one against the other** — `gh-pages` is machine-generated and force-overwritten on every deploy.
+
+Pushing to `main` publishes nothing. To deploy:
+
+```bash
+git push origin main   # source of truth only — does NOT publish
+npm run deploy         # predeploy builds, then gh-pages -d build force-pushes build/ to gh-pages
+```
+
+GitHub rebuilds Pages from `gh-pages` about a minute later.
+
+### The CNAME must ship from public/
+
+`public/CNAME` (containing `ridestreak.de`) is what keeps the custom domain attached. CRA copies `public/` verbatim into `build/`, so the file lands at the root of `gh-pages` on every deploy.
+
+Do not delete it. `npm run deploy` clears the branch and republishes only `build/`; a deploy without this file drops the CNAME, GitHub clears the Custom domain field in Settings → Pages, and `ridestreak.de` breaks until the domain is retyped by hand. (Stray dotfiles such as `.gitignore` and `.claude/settings.local.json` persist on `gh-pages` only because the `gh-pages` cleanup glob does not match dotfiles — `CNAME` is not a dotfile and is therefore deleted each time.)
+
+DNS is already configured and needs no attention: apex `ridestreak.de` → GitHub's four Pages IPs (`185.199.108-111.153`), `www` → `jmanke91.github.io`, with Enforce HTTPS on.
 
 ## Architecture
 
-### Component Structure
-- **Main App Component** (`src/App.js`): Single-page application with all sections included
-- **UI Components** (`src/components/ui/`): Reusable shadcn/ui components (Button, Card, Input, etc.)
-- **Utility Library** (`src/lib/utils.js`): Contains `cn()` function for className merging using `clsx` and `tailwind-merge`
+### Everything lives in src/App.js
 
-### Styling System
-- **Tailwind CSS** with extensive custom theme configuration
-- **CSS Custom Properties** for colors defined in tailwind.config.js
-- **Gradient brand color**: `#00D4AA` (teal/green)
-- **Dark theme**: Slate color palette with transparency effects
-- **Responsive design** with mobile-first approach
+`src/App.js` (~590 lines) is the entire page: header/nav, hero (`#download`), screenshot gallery, features (`#features`), pricing (`#pricing`, four hardcoded tiers — Free / Monthly / Yearly / Lifetime), contact (`#contact`), footer. There is no router, no data fetching, and no state beyond `isMobileMenuOpen`. Section content (feature lists, pricing tiers) is written inline as JSX, not driven by data arrays — edits mean touching the markup directly.
 
-### Content Sections
-1. **Header/Navigation** with mobile hamburger menu
-2. **Hero Section** with app download CTA
-3. **App Screenshots** gallery with hover effects
-4. **Features Section** showcasing 6 main app features
-5. **Pricing Section** with 4 pricing tiers (Free, Monthly Pro, Yearly Pro, Lifetime Pro)
-6. **Contact Section** with contact form and information
-7. **Footer** with branding
+Two outbound integration points:
+- App Store CTA: `window.open('https://apps.apple.com/de/app/ride-streak/id6748264927')` in `handleAppStoreClick`.
+- Contact form: plain `<form action="mailto:j.manke@icloud.com" method="post" encType="text/plain">` — no JS submit handler, no backend.
 
-### Key Features Highlighted
-- HealthKit integration for iOS
-- Cycling workout tracking and analytics
-- Personal challenges and goal setting
-- iOS widgets for quick access
-- Workout history and progress tracking
-- German language content
+### Two component sets — only one is live
 
-## File Organization
+- **Live:** `src/components/ui/*.jsx` — six hand-converted shadcn components (button, card, input, label, badge, textarea). They use relative imports (`../../lib/utils`) and only `clsx`/`tailwind-merge`/`class-variance-authority`. These are the ones `App.js` imports.
+- **Dead:** ~45 `.tsx` files dumped directly in `src/` (accordion.tsx, dialog.tsx, …). They are unreferenced, import `@radix-ui/*` packages that are **not installed**, and use the `@/` alias that has no tsconfig/jsconfig to resolve it. CRA never compiles them because nothing imports them.
 
-```
-src/
-├── App.js                 # Main application component
-├── lib/utils.js          # Utility functions (cn helper)
-├── components/ui/        # Reusable UI components
-├── images/               # App screenshots
-└── [shadcn components]   # Individual shadcn/ui component files
-```
+When a new UI primitive is needed, port it into `src/components/ui/` as `.jsx` with relative imports and no Radix dependency — do not import from the root `.tsx` files.
 
-## Development Notes
+`src/lib/utils.js` exports only `cn()` (clsx + tailwind-merge).
 
-- **Single Page Application**: All content is in one App.js component
-- **Static Content**: No dynamic data fetching or state management beyond UI interactions
-- **Mobile Responsive**: Designed mobile-first with breakpoints for larger screens
-- **German Content**: All user-facing text is in German
-- **Contact Form**: Uses mailto: action for form submission
-- **Image Assets**: App screenshots stored in src/images/ and public/images/
+### Styling reality vs. Tailwind config
 
-## Testing
+`tailwind.config.js` and `src/index.css` carry the full shadcn HSL-variable theme (`--primary`, `--background`, `--radius`, `.dark` block, `darkMode: ["class"]`). `App.js` largely bypasses it: the dark look comes from hardcoded `slate-*` utilities with transparency, and the brand teal `#00D4AA` appears as arbitrary values (`bg-[#00D4AA]`, gradients) ~50 times. The CSS variables mainly matter to the `src/components/ui` primitives (e.g. `bg-primary`, `border-input` in button.jsx), so changing them affects those primitives, not the page sections.
 
-Uses standard Create React App testing setup with:
-- @testing-library/react
-- @testing-library/jest-dom  
-- @testing-library/user-event
+`src/App.css` is leftover CRA boilerplate (`.App-logo` spin etc.) and is not imported anywhere.
 
-Run tests with `npm test` for interactive watch mode.
+### Images
+
+App screenshots exist twice: `src/images/*.jpeg` (imported by `App.js`, hashed by the bundler) and `public/images/*.jpeg` (served as-is). `public/app_logo.svg` is used for the OG/Twitter preview meta tags in `public/index.html`; `package.json` sets `"homepage": "./"`, so builds emit relative asset paths — these resolve correctly at the custom-domain root.
+
+## Known state
+
+`src/App.test.js` is still the untouched CRA default asserting a "learn react" link, so `npm test` fails against the real landing page. Fix or replace it if you touch tests.
