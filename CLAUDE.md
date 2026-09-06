@@ -4,73 +4,125 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Single-page marketing site for "Ride Streak", an iOS cycling app. Create React App (react-scripts 5) + Tailwind, deployed to GitHub Pages and served on the custom domain `https://ridestreak.de` (remote: `git@github.com:JManke91/ridestreaklanding.git`). All user-facing copy is **German**.
+Marketing site for **Ride Streak** (wordmark: *RideStreak*), an iPhone-only cycling analysis app. Astro 7 static site, deployed to GitHub Pages and served on the custom domain `https://ridestreak.de` (remote: `git@github.com:JManke91/ridestreaklanding.git`).
+
+The site is **bilingual (DE + EN)**. German is the primary market, not a translation target.
+
+`docs/LandingPageBrief.md` is the source of truth for app facts and page requirements. **Do not invent features.** If something is not in that brief's section 3 or 4, it does not exist in the app.
 
 ## Commands
 
 ```bash
-npm start                          # dev server on http://localhost:3000
-npm run build                      # production build into build/
-npm run deploy                     # predeploy runs build, then gh-pages -d build
-npm test                           # CRA/Jest watch mode
-npm test -- --watchAll=false       # single non-interactive run (needed in CI/agent contexts)
-npm test -- src/App.test.js        # run one test file
+npm run dev                # dev server on http://localhost:4321
+npm run build              # static build into dist/
+npm run verify             # post-build checks against the brief's definition of done
+npm run check              # astro check (TypeScript + template diagnostics)
+npm run og                 # regenerate public/og-image-{de,en}.png
+npm run deploy             # build + verify, then gh-pages -d dist
 ```
 
-There is no separate lint script — ESLint runs as part of `react-scripts start`/`build` via the `eslintConfig` block in package.json (`react-app`, `react-app/jest`). Warnings appear in the dev-server output and in build logs.
+`npm run verify` runs automatically before every deploy via `predeploy`. It fails the deploy on removed features appearing in copy, wrong per-locale terminology, broken internal links, invalid JSON-LD, missing alt text, a missing/incorrect CNAME, a wrong pricing savings figure, and **any unfilled `[…]` placeholder or missing legal disclosure on the Impressum**.
 
 ## Deployment
 
-The site is hosted on GitHub Pages, built from the **`gh-pages`** branch, and served at **https://ridestreak.de**.
+Hosted on GitHub Pages, built from the **`gh-pages`** branch, served at **https://ridestreak.de**.
 
-`main` and `gh-pages` are orthogonal, not two versions of the same tree: `main` is the source, `gh-pages` holds only the compiled output of `npm run build` (`index.html`, `static/`, hashed media). **Never merge, rebase, or diff one against the other** — `gh-pages` is machine-generated and force-overwritten on every deploy.
+`main` and `gh-pages` are orthogonal, not two versions of the same tree: `main` is the source, `gh-pages` holds only the compiled `dist/` output. **Never merge, rebase, or diff one against the other** — `gh-pages` is machine-generated and force-overwritten on every deploy.
 
-Pushing to `main` publishes nothing. To deploy:
+Pushing to `main` publishes nothing:
 
 ```bash
 git push origin main   # source of truth only — does NOT publish
-npm run deploy         # predeploy builds, then gh-pages -d build force-pushes build/ to gh-pages
+npm run deploy         # builds, verifies, then force-pushes dist/ to gh-pages
 ```
-
-GitHub rebuilds Pages from `gh-pages` about a minute later.
 
 ### The CNAME must ship from public/
 
-`public/CNAME` (containing `ridestreak.de`) is what keeps the custom domain attached. CRA copies `public/` verbatim into `build/`, so the file lands at the root of `gh-pages` on every deploy.
+`public/CNAME` (containing `ridestreak.de`) keeps the custom domain attached. Astro copies `public/` verbatim into `dist/`, so it lands at the root of `gh-pages` on every deploy. Do not delete it — a deploy without it drops the CNAME, GitHub clears the Custom domain field, and `ridestreak.de` breaks until it is retyped by hand. `npm run verify` checks for it.
 
-Do not delete it. `npm run deploy` clears the branch and republishes only `build/`; a deploy without this file drops the CNAME, GitHub clears the Custom domain field in Settings → Pages, and `ridestreak.de` breaks until the domain is retyped by hand. (Stray dotfiles such as `.gitignore` and `.claude/settings.local.json` persist on `gh-pages` only because the `gh-pages` cleanup glob does not match dotfiles — `CNAME` is not a dotfile and is therefore deleted each time.)
-
-DNS is already configured and needs no attention: apex `ridestreak.de` → GitHub's four Pages IPs (`185.199.108-111.153`), `www` → `jmanke91.github.io`, with Enforce HTTPS on.
+DNS is already configured: apex → GitHub's four Pages IPs (`185.199.108-111.153`), `www` → `jmanke91.github.io`, Enforce HTTPS on.
 
 ## Architecture
 
-### Everything lives in src/App.js
+### Copy lives in locale modules, never in markup
 
-`src/App.js` (~590 lines) is the entire page: header/nav, hero (`#download`), screenshot gallery, features (`#features`), pricing (`#pricing`, four hardcoded tiers — Free / Monthly / Yearly / Lifetime), contact (`#contact`), footer. There is no router, no data fetching, and no state beyond `isMobileMenuOpen`. Section content (feature lists, pricing tiers) is written inline as JSX, not driven by data arrays — edits mean touching the markup directly.
+`src/i18n/de.ts` and `src/i18n/en.ts` each export a `Copy` object satisfying `src/i18n/types.ts`. Components read copy via `getCopy(locale)`.
 
-Two outbound integration points:
-- App Store CTA: `window.open('https://apps.apple.com/de/app/ride-streak/id6748264927')` in `handleAppStoreClick`.
-- Contact form: plain `<form action="mailto:j.manke@icloud.com" method="post" encType="text/plain">` — no JS submit handler, no backend.
+**Never inline a user-visible string in a component, and never write `lang === 'de' ? … : …` in a template.** Adding a third language should mean adding one file.
 
-### Two component sets — only one is live
+The English file is not a translation of the German one — both are written natively. Only the structure is shared.
 
-- **Live:** `src/components/ui/*.jsx` — six hand-converted shadcn components (button, card, input, label, badge, textarea). They use relative imports (`../../lib/utils`) and only `clsx`/`tailwind-merge`/`class-variance-authority`. These are the ones `App.js` imports.
-- **Dead:** ~45 `.tsx` files dumped directly in `src/` (accordion.tsx, dialog.tsx, …). They are unreferenced, import `@radix-ui/*` packages that are **not installed**, and use the `@/` alias that has no tsconfig/jsconfig to resolve it. CRA never compiles them because nothing imports them.
+### Terminology is taken from the app, not invented
 
-When a new UI primitive is needed, port it into `src/components/ui/` as `.jsx` with relative imports and no Radix dependency — do not import from the root `.tsx` files.
+Read from the app's own `Localizable.strings`. Getting these wrong means a visitor cannot find what the page promised:
 
-`src/lib/utils.js` exports only `cn()` (clsx + tailwind-merge).
+| Feature | English page | German page |
+|---|---|---|
+| Bike & parts tab | Garage | **Werkstatt** (never "Garage") |
+| 3D route replay | 3D Flyover | **3D-Überflug** (never "3D-Flyover") |
 
-### Styling reality vs. Tailwind config
+`npm run verify` fails the build if these leak across locales.
 
-`tailwind.config.js` and `src/index.css` carry the full shadcn HSL-variable theme (`--primary`, `--background`, `--radius`, `.dark` block, `darkMode: ["class"]`). `App.js` largely bypasses it: the dark look comes from hardcoded `slate-*` utilities with transparency, and the brand teal `#00D4AA` appears as arbitrary values (`bg-[#00D4AA]`, gradients) ~50 times. The CSS variables mainly matter to the `src/components/ui` primitives (e.g. `bg-primary`, `border-input` in button.jsx), so changing them affects those primitives, not the page sections.
+### Routing
 
-`src/App.css` is leftover CRA boilerplate (`.App-logo` spin etc.) and is not imported anywhere.
+Explicit pages, not Astro's i18n router — GitHub Pages serves static files only, so the `Accept-Language` redirect the brief originally wanted is impossible.
 
-### Images
+```
+/            → German landing page, canonical → /de/
+/de/  /en/   → real, independently crawlable landing pages
+/de/impressum/  /de/datenschutz/  /de/agb/  /de/support/
+/en/privacy/    /en/terms/        /en/support/
+/de/blog/…      /en/blog/…        (content collection)
+/sitemap-index.xml  /robots.txt  /llms.txt
+```
 
-App screenshots exist twice: `src/images/*.jpeg` (imported by `App.js`, hashed by the bundler) and `public/images/*.jpeg` (served as-is). `public/app_logo.svg` is used for the OG/Twitter preview meta tags in `public/index.html`; `package.json` sets `"homepage": "./"`, so builds emit relative asset paths — these resolve correctly at the custom-domain root.
+`src/i18n/index.ts` holds `ROUTES`, the page-to-page map the language switcher resolves through so it links to the *equivalent* page rather than the other homepage. Blog posts resolve through the `pair` frontmatter field instead.
 
-## Known state
+`/de/impressum/` deliberately has no English equivalent — it is a German legal document (§ 5 DDG) linked from both locales' footers.
 
-`src/App.test.js` is still the untouched CRA default asserting a "learn react" link, so `npm test` fails against the real landing page. Fix or replace it if you touch tests.
+### Facts and switches live in src/config.ts
+
+App ID, store URL, minimum OS, prices, campaign tokens and the operator's legal details.
+
+`OPERATOR` is the single source of truth for the postal address. It feeds the Impressum, both privacy policies and the `Organization` JSON-LD — never type the address into a page. It must stay a **ladungsfähige Anschrift** (a Postfach does not satisfy § 5 DDG), and it must match the trader info in App Store Connect, which Apple publishes on the EU App Store listing.
+
+Three things there need human attention:
+
+- **`PRICING.verifiedOn` is `null`.** The prices are carried over from the previous site and are *not* verified against App Store Connect. `savings` and `savingsPercent` are computed, never hand-written — the old site shipped "Spare €2,89" against numbers that yield €1,89.
+- **`STRAVA_PROMINENCE`** is `'secondary'`. The app is self-serve capped at 10 connected Strava athletes until Strava's Developer Program Review is approved, so the page deliberately downplays Strava. Flip to `'primary'` only once that review is approved *and* the developer Strava subscription is confirmed active.
+- **`PROVIDER_TOKEN`** is `null`; set it to have `pt` appended to every App Store link for attribution.
+
+### Screenshots
+
+App screenshots live **only** in `src/assets/screens/` and are resolved through `src/assets/screens.ts`, which maps a `ScreenKey` to a file. Copy files reference the key; nothing else knows about filenames.
+
+They go through `astro:assets` (`<Picture>` in `PhoneFrame.astro`), which emits AVIF/WebP with a **JPEG** fallback at 1× and 2×. The fallback must stay JPEG — these are satellite maps and gradients, and the PNG fallback for the flyover frame weighed 8.9 MB.
+
+⚠️ The current captures are all **German UI** and are served on the English page too. An English set is still outstanding.
+
+### Styling
+
+`src/styles/tokens.css` defines every colour, type step and rhythm value. `src/styles/global.css` holds the reset, layout primitives, `.card`/`.btn`/`.pill`, the long-form `.prose` block and the motion rules.
+
+**No raw hex values in components** — if a colour is needed it gets a token first. `#FC5200` is Strava's and appears only in the Strava band.
+
+`.prose` is in `global.css` rather than a layout because blog posts render through `BaseLayout` directly; scoping it to `PageLayout` left articles unstyled.
+
+Teal is for headings, numbers, icons, borders and buttons — never paragraph text. Button labels on a teal fill use `--rs-on-teal` (near-black); white on teal is ~1.9:1.
+
+### Brand assets
+
+- `public/app_logo.svg` — the real app icon. It is the favicon, the header/footer mark (`Wordmark.astro`) and the logo on the OG cards. Do not substitute a drawn stand-in for it.
+- `public/badges/appstore-{de,en}.svg` — Apple's official localized badges, unmodified.
+- `public/badges/strava-{compatible,powered}-white.svg` — from the official Strava brand pack.
+- `brand/strava/` — the full downloaded Strava pack, kept in the repo but **outside `public/`** so 4.5 MB of EPS does not ship to gh-pages.
+
+Strava rules (developers.strava.com/guidelines) are non-negotiable: never recolour, resize out of ratio or animate the marks; never imply partnership; never put "Strava" in the site `<title>` as if it were a Strava product. The "Connect with Strava" button is deliberately **not** shown — Strava requires it to link to a real OAuth endpoint, and on a marketing page it would be a dead control.
+
+## Outstanding owner actions
+
+- Verify the three Pro prices in App Store Connect, then set `PRICING.verifiedOn`.
+- Make sure App Store Connect's trader address matches `OPERATOR` exactly — Apple publishes it on the EU App Store listing, and two differing published disclosures is its own problem.
+- Capture the English-UI screenshot set.
+- Set `PROVIDER_TOKEN` for App Store attribution, and decide on privacy-friendly analytics.
+- Cross-check `src/pages/de/datenschutz.astro` §3 against `docs/BackendPrivacy.md` in the app repo.

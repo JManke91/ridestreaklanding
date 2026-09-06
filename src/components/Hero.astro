@@ -1,0 +1,153 @@
+---
+import { type Locale } from '../config';
+import { getCopy } from '../i18n';
+import { SCREENS } from '../assets/screens';
+import AppStoreBadge from './AppStoreBadge.astro';
+import PhoneFrame from './PhoneFrame.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+---
+
+<section class="hero" id="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <h1>
+        {t.hero.h1Line1}<br />{t.hero.h1Line2}
+      </h1>
+      <p class="lead hero-sub">{t.hero.sub}</p>
+
+      <div class="hero-cta-row" id="hero-cta">
+        <AppStoreBadge
+          locale={locale}
+          position="web_hero"
+          label={t.a11y.appStoreBadge}
+          height={54}
+        />
+        <a class="btn btn-ghost" href={`#${t.features[0].id}`}>
+          {t.hero.secondary}
+          <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+
+      <p class="hero-trust">{t.hero.trust}</p>
+    </div>
+
+    <div class="hero-device">
+      <PhoneFrame
+        src={SCREENS[t.hero.shot.key]}
+        alt={t.hero.shot.alt}
+        width={330}
+        priority
+        tilt
+        glow
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: clamp(3rem, 7vw, 5.5rem) clamp(3.5rem, 8vw, 6rem);
+    overflow: hidden;
+  }
+
+  /* One large radial teal wash, upper right. No mesh, no particles (§9.3). */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(
+        900px 700px at 78% 8%,
+        color-mix(in srgb, var(--rs-teal) 6%, transparent),
+        transparent 70%
+      ),
+      var(--rs-bg);
+  }
+
+  .hero-inner {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4rem);
+    align-items: center;
+  }
+
+  .hero-copy {
+    min-width: 0;
+  }
+
+  .hero-sub {
+    margin-top: 1.5rem;
+    max-width: 52ch;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2.25rem;
+  }
+
+  .hero-trust {
+    margin-top: 1rem;
+    font-size: var(--rs-caption);
+    color: var(--rs-text-muted);
+  }
+
+  .hero-device {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-inner {
+      grid-template-columns: 55fr 45fr;
+    }
+
+    .hero-device {
+      justify-content: flex-end;
+    }
+  }
+
+  /* A 3–4s settle on load, then still (§9.4). */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-device {
+      animation: settle 900ms var(--rs-ease) both;
+    }
+
+    .hero-copy > * {
+      animation: rise 700ms var(--rs-ease) both;
+    }
+
+    .hero-copy > :nth-child(2) {
+      animation-delay: 80ms;
+    }
+    .hero-copy > :nth-child(3) {
+      animation-delay: 160ms;
+    }
+    .hero-copy > :nth-child(4) {
+      animation-delay: 240ms;
+    }
+  }
+
+  @keyframes settle {
+    from {
+      opacity: 0;
+      translate: 0 24px;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      translate: 0 12px;
+    }
+  }
+</style>

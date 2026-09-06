@@ -1,0 +1,42 @@
+---
+import { type CtaPosition, type Locale } from '../config';
+import { getCopy } from '../i18n';
+import AppStoreBadge from './AppStoreBadge.astro';
+
+interface Props {
+  locale: Locale;
+  position: CtaPosition;
+}
+
+const { locale, position } = Astro.props;
+const t = getCopy(locale);
+---
+
+{/* Secondary CTA, dropped in after the strongest feature sections (§5.5). */}
+<div class="secondary-cta reveal">
+  <AppStoreBadge
+    locale={locale}
+    position={position}
+    label={t.a11y.appStoreBadge}
+    height={48}
+  />
+  <p class="secondary-trust">{t.hero.trust}</p>
+</div>
+
+<style>
+  .secondary-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.875rem;
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding-top: clamp(2.5rem, 5vw, 3.5rem);
+    border-top: 1px solid var(--rs-border);
+    text-align: center;
+  }
+
+  .secondary-trust {
+    font-size: var(--rs-caption);
+    color: var(--rs-text-muted);
+  }
+</style>

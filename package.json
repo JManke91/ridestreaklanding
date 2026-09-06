@@ -1,53 +1,36 @@
 {
-  "name": "ride_streak_react",
-  "version": "0.1.0",
+  "name": "ridestreak-landing",
+  "type": "module",
+  "version": "2.0.0",
   "private": true,
-  "homepage": "./",
-  "dependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "lucide-react": "^0.454.0",
-    "clsx": "^2.1.1",
-    "class-variance-authority": "^0.7.1",
-    "tailwind-merge": "^2.5.5",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+  "engines": {
+    "node": ">=22.12.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "verify": "node scripts/verify-build.mjs",
+    "og": "node scripts/build-og-images.mjs",
+    "predeploy": "npm run build && npm run verify",
+    "deploy": "gh-pages -d dist --dotfiles"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/inter": "^5.2.8",
+    "astro": "^7.3.1"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.20",
+    "@astrojs/check": "^0.9.10",
     "gh-pages": "^6.3.0",
-    "postcss": "^8.5",
-    "tailwindcss": "^3.4.17",
-    "tailwindcss-animate": "^1.0.7"
+    "sharp": "^0.35.4",
+    "typescript": "^6.0.3"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "sharp": true
   }
 }

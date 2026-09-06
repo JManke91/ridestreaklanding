@@ -1,0 +1,395 @@
+@import './tokens.css';
+
+/* ---------------------------------------------------------------------------
+   Reset + base
+   --------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  /* Sticky header is 64px; keep anchor targets clear of it. */
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--rs-bg);
+  color: var(--rs-text-body);
+  font-family:
+    'Inter Variable',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  font-size: var(--rs-body);
+  line-height: 1.65;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* The attribute must beat any class that sets a display value. */
+[hidden] {
+  display: none !important;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--rs-teal);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------------------------------------------------------------------------
+   Type
+   --------------------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--rs-text);
+  text-wrap: balance;
+  hyphens: none;
+}
+
+h1 {
+  font-size: var(--rs-h1);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+h2 {
+  font-size: var(--rs-h2);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+h3 {
+  font-size: var(--rs-h3);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+p {
+  max-width: var(--rs-prose);
+}
+
+/* ---------------------------------------------------------------------------
+   Layout primitives
+   --------------------------------------------------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: var(--rs-container);
+  margin-inline: auto;
+  padding-inline: var(--rs-gutter);
+}
+
+.section {
+  padding-block: var(--rs-section-y);
+}
+
+.band {
+  background: var(--rs-surface-1);
+  border-block: 1px solid var(--rs-border);
+}
+
+.eyebrow {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rs-teal);
+  margin-bottom: 0.75rem;
+}
+
+.lead {
+  font-size: var(--rs-lead);
+  line-height: 1.6;
+  color: var(--rs-text-body);
+}
+
+.muted {
+  color: var(--rs-text-muted);
+}
+
+.stat-number {
+  font-size: var(--rs-stat);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--rs-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: 50%;
+  translate: -50% -150%;
+  z-index: 200;
+  background: var(--rs-teal);
+  color: var(--rs-on-teal);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 12px 12px;
+  font-weight: 600;
+  transition: translate 150ms var(--rs-ease);
+}
+
+.skip-link:focus {
+  translate: -50% 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Cards
+   --------------------------------------------------------------------------- */
+
+.card {
+  background: var(--rs-surface-1);
+  border: 1px solid var(--rs-border);
+  border-radius: var(--rs-radius-card);
+  padding: 24px;
+  transition:
+    border-color 180ms var(--rs-ease),
+    translate 180ms var(--rs-ease);
+}
+
+.card:hover {
+  border-color: var(--rs-border-lit);
+  translate: 0 -2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Buttons
+   --------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8125rem 1.5rem;
+  border-radius: var(--rs-radius-pill);
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition:
+    background 160ms var(--rs-ease),
+    border-color 160ms var(--rs-ease),
+    translate 160ms var(--rs-ease);
+}
+
+.btn-primary {
+  background: var(--rs-teal);
+  color: var(--rs-on-teal);
+}
+
+.btn-primary:hover {
+  background: var(--rs-teal-bright);
+  translate: 0 -1px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--rs-border);
+  color: var(--rs-text-body);
+}
+
+.btn-ghost:hover {
+  border-color: var(--rs-border-lit);
+  color: var(--rs-text);
+}
+
+/* ---------------------------------------------------------------------------
+   Pills / badges
+   --------------------------------------------------------------------------- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.6875rem;
+  border-radius: var(--rs-radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--rs-border);
+  color: var(--rs-text-muted);
+}
+
+.pill-pro {
+  color: var(--rs-gold);
+  border-color: color-mix(in srgb, var(--rs-gold) 32%, transparent);
+  background: color-mix(in srgb, var(--rs-gold) 10%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+   Long-form prose — legal pages and blog posts.
+   Lives here rather than in a layout because blog posts render through
+   BaseLayout directly; scoping it to PageLayout left articles unstyled.
+   --------------------------------------------------------------------------- */
+
+.prose h2 {
+    font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+    margin-top: 2.75rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .prose h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .prose p,
+  .prose li {
+    max-width: 72ch;
+  }
+
+  .prose p {
+    margin-bottom: 1rem;
+  }
+
+  .prose ul,
+  .prose ol {
+    margin: 0 0 1.25rem;
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .prose li::marker {
+    color: var(--rs-teal);
+  }
+
+  .prose a {
+    color: var(--rs-teal);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose strong {
+    color: var(--rs-text);
+  }
+
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .prose th,
+  .prose td {
+    text-align: left;
+    padding: 0.625rem 0.875rem;
+    border-bottom: 1px solid var(--rs-border);
+  }
+
+  .prose th {
+    color: var(--rs-text);
+    font-weight: 600;
+  }
+
+  .prose .callout {
+    background: var(--rs-surface-1);
+    border: 1px solid var(--rs-border);
+    border-left: 3px solid var(--rs-teal);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose .callout p:last-child {
+    margin-bottom: 0;
+  }
+
+  .prose .todo {
+    border-left-color: var(--rs-soon);
+  }
+
+/* ---------------------------------------------------------------------------
+   Motion — brief §9.4. Everything below the hero enters once, then rests.
+   --------------------------------------------------------------------------- */
+
+.reveal {
+  opacity: 0;
+  translate: 0 16px;
+  transition:
+    opacity 500ms var(--rs-ease),
+    translate 500ms var(--rs-ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    translate: none;
+  }
+}

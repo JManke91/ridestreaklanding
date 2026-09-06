@@ -1,0 +1,112 @@
+---
+import { type Locale } from '../config';
+import { alternates, getCopy, ROUTES } from '../i18n';
+import { landingSchema } from '../lib/schema';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Wedge from './Wedge.astro';
+import WorksWith from './WorksWith.astro';
+import FeatureSection from './FeatureSection.astro';
+import GarageStates from './GarageStates.astro';
+import StravaBand from './StravaBand.astro';
+import SecondaryCta from './SecondaryCta.astro';
+import CompareTable from './CompareTable.astro';
+import Pricing from './Pricing.astro';
+import Faq from './Faq.astro';
+import FinalCta from './FinalCta.astro';
+import Footer from './Footer.astro';
+import StickyCta from './StickyCta.astro';
+
+interface Props {
+  locale: Locale;
+  /**
+   * The root page (/) renders the German landing page but canonicalises to
+   * /de/ — GitHub Pages cannot do an Accept-Language redirect, so both are
+   * real files and hreflang carries the whole job (brief §1A, §8.2).
+   */
+  canonical?: string;
+}
+
+const { locale, canonical } = Astro.props;
+const t = getCopy(locale);
+const canonicalPath = canonical ?? ROUTES.home[locale];
+
+/*
+  Feature order is the brief's §5.5 order — by differentiation, not chronology.
+  The array positions are fixed because the header nav and the footer index
+  into them (features[0] = progress, [2] = garage, [3] = training).
+
+  Two sections deliberately break the alternating rhythm so six rows don't read
+  as a template: the Garage is a full-bleed band with wear-state cards, and the
+  3D Flyover gets the wider media treatment.
+*/
+const [progress, rides, garage, training, tours, sharing, flyover, privacy] =
+  t.features;
+
+const schema = landingSchema(locale, canonicalPath);
+---
+
+<BaseLayout
+  locale={locale}
+  title={t.meta.title}
+  description={t.meta.description}
+  canonical={canonicalPath}
+  alternates={alternates(ROUTES.home, true)}
+  ogLocale={t.ogLocale}
+  ogLocaleAlternate={t.ogLocaleAlternate}
+  ogTitle={t.meta.ogTitle}
+  ogDescription={t.meta.ogDescription}
+  ogImageAlt={t.meta.ogImageAlt}
+  jsonLd={schema}
+>
+  <a class="skip-link" href="#main">{t.a11y.skipToContent}</a>
+  <Header locale={locale} />
+
+  <main id="main">
+    <Hero locale={locale} />
+    <Wedge locale={locale} />
+    <WorksWith locale={locale} />
+
+    <FeatureSection feature={progress} index={0} />
+    <FeatureSection feature={rides} index={1} />
+
+    {/* Sits here deliberately: the reader has just seen power, cadence,
+        splits and segments, and is asking where they come from. */}
+    <StravaBand locale={locale} />
+
+    <FeatureSection
+      feature={garage}
+      index={2}
+      variant="bleed"
+    >
+      <GarageStates slot="after" locale={locale} />
+      <SecondaryCta slot="after" locale={locale} position="web_garage" />
+    </FeatureSection>
+
+    <FeatureSection feature={training} index={3}>
+      <SecondaryCta slot="after" locale={locale} position="web_training" />
+    </FeatureSection>
+
+    <FeatureSection feature={tours} index={4} />
+    <FeatureSection feature={sharing} index={5} />
+
+    <FeatureSection
+      feature={flyover}
+      index={6}
+      variant="wide"
+    >
+      <SecondaryCta slot="after" locale={locale} position="web_flyover" />
+    </FeatureSection>
+
+    <FeatureSection feature={privacy} index={7} />
+
+    <CompareTable locale={locale} />
+    <Pricing locale={locale} />
+    <Faq locale={locale} />
+    <FinalCta locale={locale} />
+  </main>
+
+  <Footer locale={locale} />
+  <StickyCta locale={locale} />
+</BaseLayout>

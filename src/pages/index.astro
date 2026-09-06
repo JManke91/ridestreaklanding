@@ -1,0 +1,11 @@
+---
+/**
+ * Root page. GitHub Pages serves static files only — the Accept-Language 302
+ * in brief §8.2 is impossible here — so `/` serves the German page (the
+ * primary market) and canonicalises to /de/, while /de/ and /en/ are both
+ * real, independently crawlable files. hreflang carries the rest.
+ */
+import Landing from '../components/Landing.astro';
+---
+
+<Landing locale="de" canonical="/de/" />

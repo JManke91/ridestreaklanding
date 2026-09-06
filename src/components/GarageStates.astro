@@ -1,0 +1,116 @@
+---
+import { type Locale } from '../config';
+import { getCopy } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+
+const fill: Record<string, string> = { ok: '46%', soon: '80%', overdue: '100%' };
+---
+
+<div class="states">
+  <p class="states-intro muted">{t.garageStates.intro}</p>
+  <ul class="states-grid">
+    {
+      t.garageStates.states.map((s, i) => (
+        <li
+          class:list={['card', `state-${s.state}`, 'reveal']}
+          style={`--reveal-delay:${i * 60}ms`}
+        >
+          <span class="state-label">
+            <span class="dot" aria-hidden="true" />
+            {s.label}
+          </span>
+          <span class="track" aria-hidden="true">
+            <span class="bar" style={`width:${fill[s.state]}`} />
+          </span>
+          <span class="example">{s.example}</span>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .states {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .states-intro {
+    max-width: 62ch;
+    font-size: 0.9375rem;
+  }
+
+  .states-grid {
+    display: grid;
+    gap: 1rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .states-grid li {
+    background: var(--rs-surface-2);
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .state-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--rs-text);
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--state-color);
+    flex-shrink: 0;
+  }
+
+  .track {
+    display: block;
+    height: 6px;
+    border-radius: var(--rs-radius-pill);
+    background: color-mix(in srgb, var(--rs-text-muted) 20%, transparent);
+    overflow: hidden;
+  }
+
+  .bar {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--state-color);
+  }
+
+  .example {
+    font-size: 0.8125rem;
+    color: var(--rs-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .state-ok {
+    --state-color: var(--rs-ok);
+  }
+  .state-soon {
+    --state-color: var(--rs-soon);
+  }
+  .state-overdue {
+    --state-color: var(--rs-overdue);
+  }
+
+  @media (min-width: 768px) {
+    .states-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

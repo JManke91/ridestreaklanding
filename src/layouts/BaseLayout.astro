@@ -1,0 +1,129 @@
+---
+import '@fontsource-variable/inter';
+import '../styles/global.css';
+import { APP, type Locale } from '../config';
+import { absolute } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  /** Canonical URL path for this page, e.g. "/de/". */
+  canonical: string;
+  alternates: { hreflang: string; href: string }[];
+  ogLocale: string;
+  ogLocaleAlternate: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImageAlt?: string;
+  ogType?: 'website' | 'article';
+  /** Serialised JSON-LD @graph, injected verbatim into the head. */
+  jsonLd?: object;
+  /** Keeps thin pages (legal, support) out of the index if ever needed. */
+  noindex?: boolean;
+}
+
+const {
+  locale,
+  title,
+  description,
+  canonical,
+  alternates,
+  ogLocale,
+  ogLocaleAlternate,
+  ogTitle,
+  ogDescription,
+  ogImageAlt,
+  ogType = 'website',
+  jsonLd,
+  noindex = false,
+} = Astro.props;
+
+const canonicalUrl = absolute(canonical);
+const ogImage = absolute(`/og-image-${locale}.png`);
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    {
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))
+    }
+
+    <meta name="theme-color" content="#0A0A0B" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="author" content={APP.developer} />
+
+    {/* Free, high-converting install path for iOS Safari visitors (brief §7.3). */}
+    <meta name="apple-itunes-app" content={`app-id=${APP.appleId}`} />
+
+    <link rel="icon" type="image/svg+xml" href="/app_logo.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/logo192.png" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={APP.name} />
+    <meta property="og:title" content={ogTitle ?? title} />
+    <meta property="og:description" content={ogDescription ?? description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlternate} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt ?? title} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle ?? title} />
+    <meta name="twitter:description" content={ogDescription ?? description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt ?? title} />
+
+    {
+      jsonLd && (
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(jsonLd)}
+        />
+      )
+    }
+  </head>
+  <body>
+    <slot />
+
+    <script>
+      // Section entry animation — brief §9.4. One-shot, cheap, and skipped
+      // entirely when the visitor prefers reduced motion.
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const targets = document.querySelectorAll<HTMLElement>('.reveal');
+
+      if (reduced || !('IntersectionObserver' in window)) {
+        targets.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+        );
+        targets.forEach((el) => observer.observe(el));
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,167 @@
+---
+import { type Locale } from '../config';
+import { getCopy } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+---
+
+{/*
+  Every answer is in the DOM at all times, collapsed with CSS only — never
+  conditionally rendered. This section is the primary surface AI answer engines
+  quote, and content injected on click is content they never see (brief §5.8).
+
+  <details>/<summary> gives keyboard and screen-reader behaviour for free, and
+  the grid-template-rows 0fr→1fr transition animates without layout jank.
+*/}
+<section id={t.faq.id} class="section faq">
+  <div class="container">
+    <div class="faq-head">
+      <span class="eyebrow">{t.faq.eyebrow}</span>
+      <h2>{t.faq.h2}</h2>
+      <p class="lead">{t.faq.lead}</p>
+    </div>
+
+    <div class="faq-list">
+      {
+        t.faq.items.map((item) => (
+          <details class="faq-item">
+            <summary>
+              <span class="faq-q">{item.q}</span>
+              <span class="faq-icon" aria-hidden="true" />
+            </summary>
+            <div class="faq-answer-wrap">
+              <div class="faq-answer">
+                <p>{item.a}</p>
+              </div>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-head {
+    max-width: 62ch;
+    margin-inline: auto;
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .faq-head .lead {
+    margin-top: 1rem;
+  }
+
+  .faq-list {
+    max-width: 800px;
+    margin-inline: auto;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--rs-border);
+  }
+
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-q {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--rs-text);
+    text-wrap: balance;
+  }
+
+  .faq-item summary:hover .faq-q {
+    color: var(--rs-teal);
+  }
+
+  /* A + that rotates into an ×. */
+  .faq-icon {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    transition: rotate 220ms var(--rs-ease);
+  }
+
+  .faq-icon::before,
+  .faq-icon::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 2px;
+    background: var(--rs-teal);
+    border-radius: 2px;
+    translate: 0 -50%;
+  }
+
+  .faq-icon::after {
+    rotate: 90deg;
+    transition: opacity 220ms var(--rs-ease);
+  }
+
+  .faq-item[open] .faq-icon {
+    rotate: 135deg;
+  }
+
+  .faq-answer-wrap {
+    display: grid;
+    grid-template-rows: 1fr;
+  }
+
+  .faq-answer {
+    overflow: hidden;
+  }
+
+  .faq-answer p {
+    padding-bottom: 1.5rem;
+    max-width: 72ch;
+    font-size: 0.9375rem;
+  }
+
+  /*
+    Collapsed state. `content-visibility` is deliberately NOT used here: the
+    text must stay in the accessibility tree and in the raw HTML for crawlers.
+  */
+  .faq-item:not([open]) .faq-answer-wrap {
+    grid-template-rows: 0fr;
+  }
+</style>
+
+<script>
+  // <details> does not animate its own open/close, so drive the grid rows.
+  // Progressive enhancement: without JS the panels still open, just instantly.
+  const items = document.querySelectorAll<HTMLDetailsElement>('.faq-item');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  items.forEach((item) => {
+    const wrap = item.querySelector<HTMLElement>('.faq-answer-wrap');
+    if (!wrap || reduced) return;
+
+    wrap.style.transition = 'grid-template-rows 260ms cubic-bezier(.16,1,.3,1)';
+
+    item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      // One panel at a time keeps the section from becoming a wall of text.
+      items.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>

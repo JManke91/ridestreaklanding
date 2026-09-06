@@ -1,0 +1,235 @@
+---
+import { type Locale } from '../config';
+import { getCopy } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+
+const freeRows = t.compare.rows.filter((r) => r.free);
+const proRows = t.compare.rows.filter((r) => !r.free);
+---
+
+<section id={t.compare.id} class="section compare">
+  <div class="container">
+    <div class="compare-head">
+      <span class="eyebrow">{t.compare.eyebrow}</span>
+      <h2>{t.compare.h2}</h2>
+      <p class="lead">{t.compare.lead}</p>
+    </div>
+
+    {/*
+      Desktop: one table, so the free/Pro split is scannable in a single pass.
+      Mobile: two stacked cards — shrinking a two-column table to 360px is what
+      makes a pricing table unreadable (§9.3).
+    */}
+    <div class="compare-table-wrap reveal">
+      <table class="compare-table">
+        <caption class="visually-hidden">{t.compare.h2}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{t.compare.eyebrow}</th>
+            <th scope="col">{t.compare.freeLabel}</th>
+            <th scope="col" class="col-pro">
+              {t.compare.proLabel}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            t.compare.rows.map((row) => (
+              <tr>
+                <th scope="row">{row.label}</th>
+                <td>
+                  {row.free ? (
+                    <>
+                      <span class="tick" aria-hidden="true">
+                        ✓
+                      </span>
+                      <span class="visually-hidden">
+                        {t.compare.includedLabel}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span class="dash" aria-hidden="true">
+                        —
+                      </span>
+                      <span class="visually-hidden">
+                        {t.compare.notIncludedLabel}
+                      </span>
+                    </>
+                  )}
+                </td>
+                <td class="col-pro">
+                  <span class="tick" aria-hidden="true">
+                    ✓
+                  </span>
+                  <span class="visually-hidden">{t.compare.includedLabel}</span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="compare-cards">
+      <div class="card">
+        <h3>{t.compare.freeLabel}</h3>
+        <ul>
+          {
+            freeRows.map((row) => (
+              <li>
+                <span class="tick" aria-hidden="true">
+                  ✓
+                </span>
+                {row.label}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="card card-pro">
+        <h3>
+          {t.compare.proLabel}
+          <span class="pill pill-pro">Pro</span>
+        </h3>
+        <ul>
+          {
+            proRows.map((row) => (
+              <li>
+                <span class="tick" aria-hidden="true">
+                  ✓
+                </span>
+                {row.label}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .compare-head {
+    max-width: 62ch;
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .compare-head .lead {
+    margin-top: 1rem;
+  }
+
+  .compare-table-wrap {
+    display: none;
+    overflow-x: auto;
+  }
+
+  .compare-table {
+    width: 100%;
+    max-width: 860px;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .compare-table th,
+  .compare-table td {
+    text-align: left;
+    padding: 0.875rem 1.25rem;
+  }
+
+  .compare-table thead th {
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rs-text-muted);
+    border-bottom: 1px solid var(--rs-border);
+  }
+
+  .compare-table tbody th {
+    font-weight: 400;
+    color: var(--rs-text-body);
+  }
+
+  .compare-table td {
+    width: 120px;
+    text-align: center;
+  }
+
+  .compare-table tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .compare-table .col-pro {
+    background: color-mix(in srgb, var(--rs-teal) 5%, transparent);
+    border-inline: 1px solid var(--rs-border-lit);
+  }
+
+  .compare-table thead .col-pro {
+    color: var(--rs-teal);
+    border-top: 2px solid var(--rs-teal);
+    border-radius: 8px 8px 0 0;
+  }
+
+  .compare-table tbody tr:last-child .col-pro {
+    border-bottom: 1px solid var(--rs-border-lit);
+    border-radius: 0 0 8px 8px;
+  }
+
+  .tick {
+    color: var(--rs-teal);
+    font-weight: 700;
+  }
+
+  .dash {
+    color: var(--rs-text-muted);
+  }
+
+  .compare-cards {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .compare-cards h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .compare-cards ul {
+    display: grid;
+    gap: 0.625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9375rem;
+  }
+
+  .compare-cards li {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: 0.625rem;
+    align-items: start;
+  }
+
+  .card-pro {
+    border-top: 2px solid var(--rs-teal);
+    box-shadow: 0 0 40px -12px color-mix(in srgb, var(--rs-teal) 30%, transparent);
+  }
+
+  @media (min-width: 860px) {
+    .compare-table-wrap {
+      display: block;
+    }
+
+    .compare-cards {
+      display: none;
+    }
+  }
+</style>

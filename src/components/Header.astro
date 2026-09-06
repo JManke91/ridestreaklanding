@@ -1,0 +1,362 @@
+---
+import { type Locale, storeUrl } from '../config';
+import { getCopy, otherLocale, route } from '../i18n';
+import Wordmark from './Wordmark.astro';
+
+interface Props {
+  locale: Locale;
+  /** Anchors only exist on the landing page; other pages link back to it. */
+  onLanding?: boolean;
+  /**
+   * Where the language switcher should point. Defaults to the other locale's
+   * homepage; blog posts and legal pages pass their own equivalent URL so the
+   * switcher lands page-to-equivalent-page (brief §8.6).
+   */
+  altPath?: string;
+}
+
+const { locale, onLanding = true, altPath } = Astro.props;
+const t = getCopy(locale);
+const other = otherLocale(locale);
+const home = route('home', locale);
+const switchTo = altPath ?? route('home', other);
+const prefix = onLanding ? '' : home;
+
+const navItems = [
+  { href: `${prefix}#${t.features[0].id}`, label: t.nav.features },
+  { href: `${prefix}#${t.features[3].id}`, label: t.nav.analysis },
+  { href: `${prefix}#${t.features[2].id}`, label: t.nav.garage },
+  { href: `${prefix}#${t.pricing.id}`, label: t.nav.pricing },
+  { href: `${prefix}#${t.faq.id}`, label: t.nav.faq },
+];
+---
+
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={home} aria-label={`${t.meta.title} – Home`}>
+      <Wordmark />
+    </a>
+
+    <nav class="nav-desktop" aria-label={t.a11y.mainNav}>
+      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+
+    <div class="header-right">
+      <nav class="lang" aria-label={t.a11y.languageNav}>
+        <span aria-current="true">{locale.toUpperCase()}</span>
+        <span class="lang-sep" aria-hidden="true">|</span>
+        <a href={switchTo} hreflang={other} lang={other}>
+          {other.toUpperCase()}
+        </a>
+      </nav>
+
+      <a
+        class="btn btn-primary header-cta"
+        id="header-cta"
+        href={storeUrl('web_header')}
+        target="_blank"
+        rel="noopener"
+      >
+        {t.nav.cta}
+      </a>
+
+      <button
+        class="burger"
+        id="burger"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-sheet"
+        aria-label={t.a11y.openMenu}
+        data-label-open={t.a11y.openMenu}
+        data-label-close={t.a11y.closeMenu}
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="sheet" id="mobile-sheet" hidden>
+    <nav class="sheet-nav" aria-label={t.a11y.mainNav}>
+      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+    <a
+      class="btn btn-primary sheet-cta"
+      href={storeUrl('web_header')}
+      target="_blank"
+      rel="noopener">{t.hero.cta}</a
+    >
+    <nav class="sheet-lang" aria-label={t.a11y.languageNav}>
+      <span aria-current="true">{locale.toUpperCase()}</span>
+      <a href={switchTo} hreflang={other} lang={other}>
+        {other.toUpperCase()}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 64px;
+    background: rgba(10, 10, 11, 0.86);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border-bottom: 1px solid transparent;
+    transition: border-color 200ms var(--rs-ease);
+  }
+
+  .site-header.scrolled {
+    border-bottom-color: var(--rs-border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 64px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .nav-desktop {
+    display: none;
+    gap: 2rem;
+  }
+
+  .nav-desktop a {
+    position: relative;
+    font-size: 0.9375rem;
+    color: var(--rs-text-muted);
+    transition: color 150ms var(--rs-ease);
+  }
+
+  .nav-desktop a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    width: 0;
+    height: 2px;
+    background: var(--rs-teal);
+    translate: -50% 0;
+    transition: width 150ms var(--rs-ease);
+  }
+
+  .nav-desktop a:hover {
+    color: var(--rs-teal);
+  }
+
+  .nav-desktop a:hover::after {
+    width: 100%;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .lang {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--rs-text-muted);
+  }
+
+  .lang [aria-current] {
+    color: var(--rs-text);
+  }
+
+  .lang a:hover {
+    color: var(--rs-teal);
+  }
+
+  .lang-sep {
+    opacity: 0.4;
+  }
+
+  /* Fades in only once the hero CTA has scrolled out of view (§9.3). */
+  .header-cta {
+    display: none;
+    padding: 0.5rem 1.125rem;
+    font-size: 0.875rem;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 220ms var(--rs-ease),
+      visibility 220ms var(--rs-ease);
+  }
+
+  .header-cta.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .burger {
+    display: grid;
+    place-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .burger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--rs-text);
+    transition:
+      translate 220ms var(--rs-ease),
+      rotate 220ms var(--rs-ease),
+      opacity 160ms var(--rs-ease);
+  }
+
+  .burger[aria-expanded='true'] span:nth-child(1) {
+    translate: 0 7px;
+    rotate: 45deg;
+  }
+
+  .burger[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .burger[aria-expanded='true'] span:nth-child(3) {
+    translate: 0 -7px;
+    rotate: -45deg;
+  }
+
+  /*
+    `display: flex` on a class beats the [hidden] attribute's UA default of
+    display:none, so the sheet must opt out explicitly or it covers the page.
+  */
+  .sheet[hidden] {
+    display: none;
+  }
+
+  /* Full-screen sheet, not a cramped dropdown (§9.3). */
+  .sheet {
+    position: fixed;
+    inset: 64px 0 0;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2.5rem var(--rs-gutter) calc(2.5rem + env(safe-area-inset-bottom));
+    background: var(--rs-bg);
+    overflow-y: auto;
+  }
+
+  .sheet-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .sheet-nav a {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--rs-text);
+    letter-spacing: -0.01em;
+  }
+
+  .sheet-cta {
+    align-self: flex-start;
+  }
+
+  .sheet-lang {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--rs-text-muted);
+    border-top: 1px solid var(--rs-border);
+    padding-top: 1.5rem;
+  }
+
+  .sheet-lang [aria-current] {
+    color: var(--rs-text);
+  }
+
+  @media (min-width: 900px) {
+    .nav-desktop {
+      display: flex;
+    }
+
+    .burger {
+      display: none;
+    }
+
+    .header-cta {
+      display: inline-flex;
+    }
+
+    .sheet {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  const burger = document.getElementById('burger');
+  const sheet = document.getElementById('mobile-sheet');
+  const headerCta = document.getElementById('header-cta');
+
+  // 1px bottom border appears only after 40px of scroll.
+  const onScroll = () => {
+    header?.classList.toggle('scrolled', window.scrollY > 40);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile sheet.
+  const setMenu = (open: boolean) => {
+    if (!burger || !sheet) return;
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute(
+      'aria-label',
+      (open ? burger.dataset.labelClose : burger.dataset.labelOpen) ?? ''
+    );
+    sheet.hidden = !open;
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+
+  burger?.addEventListener('click', () => {
+    setMenu(burger.getAttribute('aria-expanded') !== 'true');
+  });
+
+  sheet?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) setMenu(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && sheet && !sheet.hidden) setMenu(false);
+  });
+
+  // Header CTA appears once the hero CTA is out of view.
+  const heroCta = document.getElementById('hero-cta');
+  if (heroCta && headerCta && 'IntersectionObserver' in window) {
+    new IntersectionObserver(
+      ([entry]) => headerCta.classList.toggle('visible', !entry.isIntersecting),
+      { rootMargin: '-64px 0px 0px 0px' }
+    ).observe(heroCta);
+  } else {
+    headerCta?.classList.add('visible');
+  }
+</script>

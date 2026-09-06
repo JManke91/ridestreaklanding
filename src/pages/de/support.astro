@@ -1,0 +1,81 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { APP } from '../../config';
+import { ROUTES } from '../../i18n';
+
+/**
+ * Ersetzt das alte Kontaktformular. Das war ein
+ * <form action="mailto:…" method="post">, das Chrome und Safari
+ * regelmäßig kommentarlos verschlucken (Brief §1A, Defekt 8).
+ * Ein echter mailto-Link plus sichtbare Adresse funktioniert überall.
+ */
+---
+
+<PageLayout
+  locale="de"
+  title="Support"
+  description="Hilfe zu Ride Streak: häufige Probleme mit Apple Health, Strava und der Werkstatt – und wie du uns erreichst."
+  paths={ROUTES.support}
+  intro="Schreib uns einfach. Es antwortet der Entwickler, nicht ein Ticketsystem."
+>
+  <div class="callout">
+    <p>
+      <strong>E-Mail:</strong>
+      <a href={`mailto:${APP.supportEmail}?subject=Ride%20Streak%20Support`}
+        >{APP.supportEmail}</a
+      >
+    </p>
+    <p>
+      Hilfreich sind: deine iOS-Version, die App-Version (Einstellungen → ganz
+      unten) und – wenn es um eine bestimmte Fahrt geht – deren Datum.
+    </p>
+  </div>
+
+  <h2>Häufige Fälle</h2>
+
+  <h3>Es werden keine Fahrten angezeigt</h3>
+  <p>
+    Ride Streak liest ausschließlich aus Apple Health. Prüfe unter
+    Einstellungen → Datenschutz &amp; Sicherheit → Health → Ride Streak, ob
+    alle Kategorien freigegeben sind. Fehlt die Freigabe für „Workouts", bleibt
+    die Liste leer. Fahrten, die nur in einer Hersteller-App liegen und nicht
+    nach Apple Health geschrieben werden, erreichen die App nicht – dafür ist
+    die optionale Strava-Verbindung da.
+  </p>
+
+  <h3>Leistung, Trittfrequenz oder Segmente fehlen</h3>
+  <p>
+    Diese Werte schreibt Apple Health nicht. Verbinde in den Einstellungen
+    Strava, damit Ride Streak sie von deinem Radcomputer nachladen kann.
+  </p>
+
+  <h3>Die Werkstatt zählt keine Kilometer</h3>
+  <p>
+    Bauteile zählen erst ab ihrem Einbaudatum, und nur für Fahrten, die dem
+    jeweiligen Rad zugeordnet sind. Prüfe die Zuordnungsregeln oder weise
+    Fahrten über „Fahrten nach Datum zuordnen" nachträglich zu.
+  </p>
+
+  <h3>Käufe wiederherstellen</h3>
+  <p>
+    Öffne Einstellungen in der App und tippe auf „Käufe wiederherstellen".
+    Voraussetzung ist dieselbe Apple-ID, mit der gekauft wurde. Erstattungen
+    laufen ausschließlich über
+    <a href="https://reportaproblem.apple.com" rel="noopener" target="_blank"
+      >reportaproblem.apple.com</a
+    >.
+  </p>
+
+  <h3>Abo kündigen</h3>
+  <p>
+    Einstellungen deines iPhones → dein Name → Abonnements → Ride Streak. Nach
+    Ablauf bleiben alle kostenlosen Funktionen erhalten.
+  </p>
+
+  <h3>Konto und Cloud-Daten löschen</h3>
+  <p>
+    Wenn du RideStreak Cloud aktiviert hast, kannst du dein Konto samt aller
+    Serverdaten direkt in den App-Einstellungen löschen. Ohne Cloud gibt es
+    kein Konto – dann reicht das Löschen der App.
+  </p>
+</PageLayout>

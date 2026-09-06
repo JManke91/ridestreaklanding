@@ -1,0 +1,117 @@
+---
+import { type Locale } from '../config';
+import { alternates, getCopy, otherLocale, route } from '../i18n';
+import { pageSchema } from '../lib/schema';
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  /** Page <title>; falls back to `${title} – Ride Streak`. */
+  metaTitle?: string;
+  description: string;
+  /** Paths of this page in both locales, for canonical + hreflang. */
+  paths: Record<Locale, string>;
+  lastUpdated?: string;
+  intro?: string;
+}
+
+const { locale, title, metaTitle, description, paths, lastUpdated, intro } =
+  Astro.props;
+const t = getCopy(locale);
+const canonical = paths[locale];
+const altPath = paths[otherLocale(locale)];
+
+const schema = pageSchema({
+  locale,
+  canonical,
+  title,
+  description,
+  breadcrumbs: [
+    { name: 'Ride Streak', path: route('home', locale) },
+    { name: title, path: canonical },
+  ],
+});
+---
+
+<BaseLayout
+  locale={locale}
+  title={metaTitle ?? `${title} – Ride Streak`}
+  description={description}
+  canonical={canonical}
+  alternates={alternates(paths)}
+  ogLocale={t.ogLocale}
+  ogLocaleAlternate={t.ogLocaleAlternate}
+  jsonLd={schema}
+>
+  <a class="skip-link" href="#main">{t.a11y.skipToContent}</a>
+  <Header locale={locale} onLanding={false} altPath={altPath} />
+
+  <main id="main" class="page">
+    <div class="container">
+      <header class="page-head">
+        <h1>{title}</h1>
+        {intro && <p class="lead">{intro}</p>}
+        {
+          lastUpdated && (
+            <p class="page-updated muted">
+              {t.legal.lastUpdated}: {lastUpdated}
+            </p>
+          )
+        }
+      </header>
+
+      <div class="prose">
+        <slot />
+      </div>
+
+      <p class="page-back">
+        <a href={route('home', locale)}>← {t.legal.backHome}</a>
+      </p>
+    </div>
+  </main>
+
+  <Footer locale={locale} onLanding={false} altPath={altPath} />
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .page :global(.container) {
+    max-width: 820px;
+  }
+
+  .page-head {
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rs-border);
+  }
+
+  .page-head h1 {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+  }
+
+  .page-head .lead {
+    margin-top: 1rem;
+  }
+
+  .page-updated {
+    margin-top: 1rem;
+    font-size: var(--rs-caption);
+  }
+
+  .page-back {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rs-border);
+    font-size: var(--rs-caption);
+  }
+
+  .page-back a:hover {
+    color: var(--rs-teal);
+  }
+</style>

@@ -1,0 +1,84 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { LOCALES, type Locale } from '../../../config';
+import { getCopy, ROUTES } from '../../../i18n';
+import { formatDate, postPath, postsFor } from '../../../lib/blog';
+import PageLayout from '../../../layouts/PageLayout.astro';
+
+export const getStaticPaths = (() =>
+  LOCALES.map((lang) => ({ params: { lang } }))) satisfies GetStaticPaths;
+
+const locale = Astro.params.lang as Locale;
+const t = getCopy(locale);
+const posts = await postsFor(locale);
+---
+
+<PageLayout
+  locale={locale}
+  title={t.blog.indexTitle}
+  metaTitle={`${t.blog.indexTitle} – Ride Streak`}
+  description={t.blog.indexDescription}
+  paths={ROUTES.blog}
+  intro={t.blog.indexLead}
+>
+  <ul class="post-list">
+    {
+      posts.map((post) => (
+        <li class="card post">
+          <a href={postPath(post)}>
+            <time datetime={post.data.pubDate.toISOString()}>
+              {formatDate(post.data.pubDate, locale)}
+            </time>
+            <h2>{post.data.title}</h2>
+            <p>{post.data.excerpt}</p>
+            <span class="more">{t.blog.readMore} →</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</PageLayout>
+
+<style>
+  .post-list {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .post a {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .post time {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--rs-text-muted);
+  }
+
+  .post h2 {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .post:hover h2 {
+    color: var(--rs-teal);
+  }
+
+  .post p {
+    color: var(--rs-text-body);
+    font-size: 0.9375rem;
+    margin: 0;
+  }
+
+  .more {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--rs-teal);
+    margin-top: 0.25rem;
+  }
+</style>
