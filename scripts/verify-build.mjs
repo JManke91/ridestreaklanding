@@ -249,9 +249,12 @@ for (const file of pages) {
 // ---------------------------------------------------------------------------
 // 9. Root files (§7.4).
 // ---------------------------------------------------------------------------
-for (const f of ['CNAME', 'robots.txt', 'llms.txt', 'sitemap-index.xml', 'og-image-de.png', 'og-image-en.png']) {
+for (const f of ['CNAME', '.nojekyll', 'robots.txt', 'llms.txt', 'sitemap-index.xml', 'og-image-de.png', 'og-image-en.png', 'favicon.ico', 'logo192.png', 'apple-touch-icon.png']) {
   if (!existsSync(path.join(DIST, f))) fail(`dist/${f} is missing`);
 }
+// Without .nojekyll, GitHub Pages runs Jekyll, which silently drops every
+// path starting with an underscore — i.e. all of Astro's /_astro/ output.
+// The build looks perfect on disk and the live site has no CSS at all.
 {
   const cname = await readFile(path.join(DIST, 'CNAME'), 'utf8');
   if (cname.trim() !== 'ridestreak.de')
