@@ -77,10 +77,10 @@ export const STRAVA_PROMINENCE: 'secondary' | 'primary' = 'secondary';
 /**
  * App Store pricing.
  *
- * price last verified: NOT YET VERIFIED — carried over from the previous site.
- * ⚠️ Confirm all three Pro prices in App Store Connect / RevenueCat before
- * deploying, then update `verifiedOn`. A wrong price is a refund driver and,
- * for German consumers, a legal exposure (brief §5.7, §10).
+ * Confirmed by the owner on the date in `verifiedOn`, which is rendered into
+ * the pricing section as an HTML comment (brief §5.7). Re-confirm against App
+ * Store Connect whenever a price changes and move the date — a wrong price is
+ * a refund driver and, for German consumers, a legal exposure (§10).
  *
  * `savings` and `savingsPercent` are computed, never hand-written — the old
  * site shipped "Spare €2,89" against numbers that yield €1,89.
@@ -90,7 +90,7 @@ const YEARLY = 9.99;
 const LIFETIME = 24.99;
 
 export const PRICING = {
-  verifiedOn: null as string | null,
+  verifiedOn: '2026-09-06' as string | null,
   currency: 'EUR',
   monthly: MONTHLY,
   yearly: YEARLY,

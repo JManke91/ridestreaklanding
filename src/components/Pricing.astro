@@ -17,6 +17,11 @@ const savingsLine = t.pricing.savingsLine
   .replace('{percent}', String(PRICING.savingsPercent));
 ---
 
+{/* Astro emits literal HTML comments verbatim, so this one goes through
+    set:html to interpolate the date (brief §5.7). */}
+<Fragment
+  set:html={`<!-- price last verified: ${PRICING.verifiedOn ?? 'NOT VERIFIED'} -->`}
+/>
 <section id={t.pricing.id} class="section pricing band">
   <div class="container">
     <div class="pricing-head">

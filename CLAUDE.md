@@ -88,7 +88,7 @@ App ID, store URL, minimum OS, prices, campaign tokens and the operator's legal 
 
 Three things there need human attention:
 
-- **`PRICING.verifiedOn` is `null`.** The prices are carried over from the previous site and are *not* verified against App Store Connect. `savings` and `savingsPercent` are computed, never hand-written — the old site shipped "Spare €2,89" against numbers that yield €1,89.
+- **`PRICING`** was confirmed by the owner on 2026-09-06 (`verifiedOn`), which is rendered into the pricing section as an HTML comment. Re-confirm and move the date whenever a price changes. `savings` and `savingsPercent` are computed, never hand-written — the old site shipped "Spare €2,89" against numbers that yield €1,89.
 - **`STRAVA_PROMINENCE`** is `'secondary'`. The app is self-serve capped at 10 connected Strava athletes until Strava's Developer Program Review is approved, so the page deliberately downplays Strava. Flip to `'primary'` only once that review is approved *and* the developer Strava subscription is confirmed active.
 - **`PROVIDER_TOKEN`** is `null`; set it to have `pt` appended to every App Store link for attribution.
 
@@ -121,7 +121,6 @@ Strava rules (developers.strava.com/guidelines) are non-negotiable: never recolo
 
 ## Outstanding owner actions
 
-- Verify the three Pro prices in App Store Connect, then set `PRICING.verifiedOn`.
 - Make sure App Store Connect's trader address matches `OPERATOR` exactly — Apple publishes it on the EU App Store listing, and two differing published disclosures is its own problem.
 - Capture the English-UI screenshot set.
 - Set `PROVIDER_TOKEN` for App Store attribution, and decide on privacy-friendly analytics.
