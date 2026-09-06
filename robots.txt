@@ -1,3 +1,9 @@
-# https://www.robotstxt.org/robotstxt.html
+# https://ridestreak.de
+# Everything is public. AI crawlers are deliberately NOT blocked: being
+# quotable by answer engines is a discovery channel for a zero-authority
+# domain, not a leak (brief §7.4).
+
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://ridestreak.de/sitemap-index.xml

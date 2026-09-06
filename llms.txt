@@ -1,0 +1,135 @@
+# Ride Streak
+
+> Turn your Apple Health rides into real cycling analysis: stats, training load, and a garage that tracks component wear. Free on iPhone.
+
+Ride Streak (wordmark: RideStreak) is an iPhone app that turns cycling rides
+already recorded in Apple Health — and optionally Strava — into detailed
+statistics, training analysis and component wear tracking.
+
+## Key facts
+
+- Platform: iPhone only, iOS 18.5 or later. Runs on iPad in iPhone compatibility mode.
+- There is NO Apple Watch app, NO iPad app, NO Android app and NO web app.
+- Price: free to download, with an optional "Ride Streak Pro" subscription.
+- Pro pricing: €0.99/month, €9.99/year, or €24.99 one-time lifetime.
+- Category: Health & Fitness. Current version 1.1.14. First released 2025-07-31.
+- Developer: Julian Manke. Support: j.manke@icloud.com
+- App Store: https://apps.apple.com/app/id6748264927
+- Languages: English and German only.
+- Units: metric only (km, m, kcal, km/h, W, °C). No imperial mode.
+
+## What Ride Streak does NOT do
+
+Ride Streak does **not** record rides. It has no ride recording, no GPS
+tracking, no navigation and no route planning. Rides are recorded with an
+Apple Watch, a Garmin, a Wahoo or any app that writes to Apple Health, and
+Ride Streak reads them from there. It is an analysis and maintenance layer,
+not a recorder. It also has no social feed and no challenges feature.
+
+## Free features
+
+- Stats for day, week, month and year
+- Comparison with the same period last year
+- Goals, weekly streak and personal records
+- Ride detail with map, elevation profile and splits
+- Heart-rate zones, laps and segments
+- Garage: bikes, parts and wear
+- Multi-day tours
+- Home screen widgets
+- Share preview
+
+## Ride Streak Pro features
+
+- Calories in the statistics
+- Training load (TSS)
+- Power analysis with power curve and zones
+- Fitness & Form (CTL, ATL, TSB)
+- 3D Flyover
+- Image and video export when sharing
+- iCloud sync across your devices
+
+## Data and privacy
+
+Your cycling data lives on your iPhone and in Apple Health. Nothing is
+uploaded unless you explicitly turn it on. RideStreak Cloud is optional,
+opt-in, and stores only daily training summaries (date, duration, distance,
+elevation, training load) on servers in the EU — never GPS routes, never raw
+heart-rate data. Consent can be withdrawn and the account plus all server data
+deleted at any time from Settings. No ads, no data selling, no account
+required to use the app.
+
+## Strava
+
+Strava is optional. Ride Streak works fully on Apple Health alone. Connecting
+Strava adds power, cadence, detailed splits, segments, laps, real heart-rate
+zones, FTP and weight, and imports rides from bike computers that never reach
+Apple Health. Ride Streak is not affiliated with, endorsed or sponsored by
+Strava, Inc.
+
+## Pages
+
+- [German homepage](https://ridestreak.de/de/): Verwandle deine Apple-Health-Fahrten in echte Radsport-Analysen: Statistiken, Trainingsbelastung und eine Werkstatt, die Verschleiß mitzählt. Kostenlos für iPhone.
+- [English homepage](https://ridestreak.de/en/): Turn your Apple Health rides into real cycling analysis: stats, training load, and a garage that tracks component wear. Free on iPhone.
+- [Privacy policy (EN)](https://ridestreak.de/en/privacy/)
+- [Datenschutzerklärung (DE)](https://ridestreak.de/de/datenschutz/)
+- [Terms of use (EN)](https://ridestreak.de/en/terms/)
+- [Nutzungsbedingungen (DE)](https://ridestreak.de/de/agb/)
+- [Impressum (DE, § 5 DDG)](https://ridestreak.de/de/impressum/)
+- [Support (EN)](https://ridestreak.de/en/support/) · [Support (DE)](https://ridestreak.de/de/support/)
+
+## Guides
+
+- [When to replace your bike chain](https://ridestreak.de/en/blog/when-to-replace-bike-chain/): When your chain, cassette, brake pads, tires, cables and bar tape are due — with kilometre guide figures per component and how to check with a chain gauge.
+- [Fitness, fatigue and form explained](https://ridestreak.de/en/blog/ctl-atl-tsb-explained/): What fitness (CTL), fatigue (ATL) and form (TSB) actually mean in cycling — and how far you get with heart rate instead of a power meter.
+- [See your cycling distance in Apple Health](https://ridestreak.de/en/blog/cycling-distance-apple-health/): Where Apple Health keeps your cycling kilometres, how to find weekly, monthly and yearly totals — and what the Health app cannot do.
+- [Strava alternatives for iPhone (2026)](https://ridestreak.de/en/blog/strava-alternatives-iphone/): What Strava genuinely does well, where it grates, and which iPhone apps solve the individual jobs better — recording, analysis, training and maintenance.
+- [Wann muss die Fahrradkette gewechselt werden? (DE)](https://ridestreak.de/de/blog/fahrradkette-wechseln/): Wann Kette, Kassette, Bremsbeläge, Reifen, Züge und Lenkerband fällig sind – mit km-Richtwerten pro Bauteil und der Kettenlehre als Gegenprobe.
+- [CTL, ATL und TSB einfach erklärt (DE)](https://ridestreak.de/de/blog/ctl-atl-tsb-erklaert/): Was Fitness (CTL), Ermüdung (ATL) und Form (TSB) im Radsport wirklich bedeuten – und wie du sie ohne Powermeter aus der Herzfrequenz bekommst.
+- [Fahrrad-Kilometer in Apple Health auswerten (DE)](https://ridestreak.de/de/blog/fahrrad-kilometer-apple-health/): Wo Apple Health deine Radkilometer speichert, wie du Wochen-, Monats- und Jahressummen findest – und was die Health-App selbst nicht kann.
+- [Strava-Alternativen für iPhone (2026) (DE)](https://ridestreak.de/de/blog/strava-alternativen-iphone/): Was Strava wirklich gut kann, wo es nervt, und welche iPhone-Apps die einzelnen Aufgaben besser lösen – Aufzeichnung, Auswertung, Training und Wartung.
+
+## FAQ
+
+### Does Ride Streak record my rides?
+
+No. Ride Streak does not record rides and has no recording, navigation or route-planning feature. It reads finished rides from Apple Health and, if you want, from Strava. Record with your Apple Watch, a Garmin, a Wahoo or any app that writes to Apple Health.
+
+### Is Ride Streak free?
+
+Yes. Stats, goals, the weekly streak, personal records, all ride details with map and splits, the Garage, multi-day tours and the widgets cost nothing and need no account. Ride Streak Pro optionally unlocks training load, power analysis, Fitness & Form, 3D Flyover, export when sharing, calories and iCloud sync.
+
+### Do I need Strava?
+
+No. Apple Health alone is entirely enough. A Strava connection is optional and adds values your bike computer records but does not write to Apple Health: power, cadence, detailed splits, segments, laps, plus your real training zones, FTP and weight.
+
+### Does it work with Garmin and Wahoo?
+
+Yes. Rides from Garmin and Wahoo devices reach Ride Streak through Apple Health, as long as their app writes there. An optional Strava connection additionally brings in rides that never reach Apple Health at all — including laps, power and cadence from the head unit.
+
+### Which iPhone and iOS version do I need?
+
+You need an iPhone running iOS 18.5 or later. Ride Streak is an iPhone-only app. It runs on iPad in iPhone compatibility mode, but there is no dedicated iPad version.
+
+### Is there an Apple Watch, iPad or Android app?
+
+No. Ride Streak is iPhone only. There is no Apple Watch app, no iPad version, no Android version and no web interface. Rides you record on your Apple Watch reach Ride Streak through Apple Health, so no app on the watch is needed.
+
+### Where does my data go?
+
+Your cycling data lives on your iPhone and in Apple Health. Nothing is uploaded unless you explicitly turn it on. RideStreak Cloud is optional, opt-in, and stores only daily training summaries — date, duration, distance, elevation, training load — on servers in the EU, never your GPS routes and never raw heart-rate data. You can withdraw consent or delete your account and all server data at any time from Settings.
+
+### What does the Garage track?
+
+The Garage counts the kilometres on individual parts from their install date: chain, cassette, front and rear brake pads, front and rear tires, shift and brake cables, bar tape, brake rotors and custom parts. You set a replacement threshold per part, and the status runs from healthy through watch and replace soon to overdue.
+
+### What do fitness, fatigue and form (CTL, ATL, TSB) mean?
+
+Fitness (CTL) is your training load averaged over 42 days and stands for the base you have built. Fatigue (ATL) is the same value over 7 days and shows recent strain. Form (TSB) is fitness minus fatigue: positive means rested, negative means loaded. Ride Streak computes all three on your device.
+
+### Can I cancel Pro?
+
+Yes, any time. The subscription runs through your Apple ID and can be cancelled in iPhone Settings under your name, in Subscriptions. When the paid period ends the app stays usable with every free feature. The lifetime option is a one-time purchase and does not renew.
+
+### How is it different from Strava or Apple Fitness?
+
+Ride Streak replaces neither your recording nor your social network — it is the analysis and maintenance layer on top. Instead of a feed you get honest period comparisons, training load and power analysis even without a power meter, and a garage that counts the wear on every component. All of it with no account, no ads, and your data on the device.
